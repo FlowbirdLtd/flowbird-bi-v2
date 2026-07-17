@@ -167,6 +167,7 @@ const CURRENCY_COLUMNS = {
     'perspective_ebitda_post_cambridge','assets_under_advice',
     'expected_cambridge_opportunity_aum','expected_cambridge_opportunity_ebitda',
     'aua_per_household','aua_per_client','fixed_costs','defined_benefit_transfer_total',
+    'broker_fee_value',
   ],
 }
 

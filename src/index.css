@@ -24,3 +24,13 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Scroll container whose horizontal scrollbar is rendered elsewhere
+   (e.g. a synced scrollbar strip above a wide table) */
+.hide-h-scrollbar {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* legacy Edge/IE */
+}
+.hide-h-scrollbar::-webkit-scrollbar {
+  display: none;              /* Chrome, Edge, Safari */
+}

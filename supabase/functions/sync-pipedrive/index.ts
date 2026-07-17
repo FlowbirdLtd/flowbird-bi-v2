@@ -319,7 +319,7 @@ function mapDeal(
     introductory_company:       cf('Introductory Company'),
     introductory_contact:       cf('Introductory Contact'),
     broker_fee_type:            cf('Broker Fee'),
-    broker_fee_value:           cf('Broker Fee (£)', 'Broker Fee (?)'),
+    broker_fee_value:           toGBP(cf('Broker Fee (£)', 'Broker Fee (?)')),
     network_name:               cf('Network Name (if applicable)', 'Network Name'),
     law_firm_sell_side:         cf('Law Firm (Sell Side)'),
     lawyer_contact_sell_side:   cf('Lawyer Contact (Sell Side)'),

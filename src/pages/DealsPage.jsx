@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDeals } from '../hooks/useDeals'
 import ExportModal from '../components/ExportModal'
@@ -39,6 +39,26 @@ export default function DealsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(25)
   const [showExport, setShowExport] = useState(false)
+
+  // The table's horizontal scrollbar is shown ABOVE the table: a thin
+  // scroll strip whose inner width mirrors the table's scrollWidth, with
+  // scroll positions synced both ways. The table's own bottom scrollbar
+  // is hidden via the hide-h-scrollbar class.
+  const topScrollRef = useRef(null)
+  const topScrollInnerRef = useRef(null)
+  const tableScrollRef = useRef(null)
+
+  useEffect(() => {
+    const container = tableScrollRef.current
+    const inner = topScrollInnerRef.current
+    if (!container || !inner) return
+    const update = () => { inner.style.width = container.scrollWidth + 'px' }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(container)
+    if (container.firstElementChild) ro.observe(container.firstElementChild)
+    return () => ro.disconnect()
+  })
 
   const filtered = deals.filter(d => {
     const matchTab = activeTab === 'All Deals' || d.stage === activeTab
@@ -164,8 +184,26 @@ export default function DealsPage() {
             <div style={{ marginTop: 8, color: '#6b7280' }}>Check that schema.sql, seed.sql, and policies.sql have all been run in Supabase.</div>
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <>
+            {/* Top horizontal scrollbar, synced with the table below */}
+            <div
+              ref={topScrollRef}
+              onScroll={() => {
+                if (tableScrollRef.current) tableScrollRef.current.scrollLeft = topScrollRef.current.scrollLeft
+              }}
+              style={{ overflowX: 'auto', overflowY: 'hidden', borderBottom: '1px solid var(--border)' }}
+            >
+              <div ref={topScrollInnerRef} style={{ height: 1 }} />
+            </div>
+            <div
+              ref={tableScrollRef}
+              className="hide-h-scrollbar"
+              onScroll={() => {
+                if (topScrollRef.current) topScrollRef.current.scrollLeft = tableScrollRef.current.scrollLeft
+              }}
+              style={{ overflowX: 'auto' }}
+            >
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border)' }}>
                   {['View', 'Title', 'Value', 'Contact Name', 'Introductory Company', 'Stage', 'Owner', 'Latest Status (AC)', 'Exchanged Date', 'Complete Date', 'Assets Under Advice', 'Forecast Recurring Income', 'Completion Payment', 'Headline Consideration', 'EBITDA Multiple', 'Deal Address'].map(col => (
@@ -215,8 +253,9 @@ export default function DealsPage() {
                   </tr>
                 )}
               </tbody>
-            </table>
-          </div>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>
