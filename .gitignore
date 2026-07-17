@@ -8,3 +8,9 @@ dist-ssr
 *.log
 .vite
 supabase/.temp
+docs/Error_refs
+docs/Logos
+docs/Reference_DataBase_Tables
+docs/Reference_Pages
+docs/Screenshots
+docs/Test Files
