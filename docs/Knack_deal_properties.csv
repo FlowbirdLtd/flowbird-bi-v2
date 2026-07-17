@@ -1,0 +1,220 @@
+Field Name,Data Type
+Deal Pipedrive ID,Text
+Date Created,Date
+Title,Text
+Weighted Value,Text
+Currency,Text
+Expected Close Date,Date
+Date/Time,Date
+Status,Text
+Basis of Deal,Text
+Deal Size,Text
+Vendor & Ownership Structure,Text
+Deal Source,Text
+Latest Status (Acquisition Committee),Text
+Acquisition Type,Text
+Deal Structure,Text
+Payment Schedule,Text
+Headline Consideration,Text
+RI Multiple,Text
+Net Turnover Multiple,Text
+EBITDA Multiple,Text
+EBITDA Multiple (post-Cambridge),Text
+Adviser Contracts Requested,Text
+Details of Property,Text
+Lease Details,Text
+Other Integration Notes,Text
+Other Regulatory Items of Note,Text
+Reason for Decline Detail,Text
+Broker Fee,Text
+Client Letter Status,Text
+Loss Driver,Text
+Mailing Data Status,Text
+Network Name (if applicable),Text
+Ownership of Property,Text
+Perspective Entity,Text
+Perspective Principal,Text
+Perspective Regional Director,Text
+Perspective Trading Style Registered,Text
+Post-Acquisition Office Plans,Text
+RDD Lead,Text
+Reason for Decline,Text
+Receiving Office,Text
+Regional Director / Regional Manager Introduction   ,Text
+Creator,Text
+Owner,Text
+Value,Text
+Weighted value,Text
+Probability,Text
+Organisation Copy,Text
+Pipeline,Text
+Contact person,Text
+Stage,Text
+Label,Text
+Deal created,Date
+Update time,Date
+Last stage change,Text
+Next activity date,Date
+Last activity date,Date
+Won time,Text
+Won time : From/To,Text
+Won time : Formatted,Text
+Last email received,Date
+Last email sent,Date
+Lost time,Date
+Deal closed on,Date
+Lost reason,Text
+Visible to,Text
+Total activities,Text
+Done activities,Text
+Activities to do,Text
+Email messages count,Text
+Expected close date,Date
+Product quantity,Text
+Product amount,Text
+Product name,Text
+MRR,Text
+ARR,Text
+ACV,Text
+Source origin,Text
+Source origin ID,Text
+Source channel,Text
+Source channel ID,Text
+FDD Lead,Text
+Currency of Headline Consideration,Text
+Introduction Date,Date
+First Meeting Date,Date
+Offer Made Date,Date
+HoTs Issued Date,Date
+HoTs Signed Date,Date
+Date DD Completed,Date
+Deal Exchanged Date,Date
+Deal Complete Date,Date
+Introductory Company,Text
+Introductory Contact,Text
+Broker Fee (?),Text
+Law Firm (Sell Side),Text
+Lawyer Contact (Sell Side),Text
+Law Firm (Buy Side),Text
+Lawyer Contact (Buy Side),Text
+RI / Adviser,Text
+NB / Adviser,Text
+Latest Recurring Income,Text
+Latest New Business,Text
+Latest Turnover,Text
+Organic Growth in RI %,Text
+Forecast Recurring Income,Text
+Forecast New Business,Text
+Forecast Turnover,Text
+Expected Adviser Cost,Text
+Existing EBITDA,Text
+Perspective EBITDA,Text
+Perspective EBITDA (post-Cambridge),Text
+EBITDA Margin %,Text
+Assets Under Advice,Text
+Expected Cambridge Opportunity (AuM),Text
+Expected Cambridge Opportunity (EBITDA),Text
+Households per Adviser,Text
+Support Staff to Advisor Cost Ratio %,Text
+Board Report Issued,Date
+Target Exchange,Date
+Target Completion,Date
+FDD / RDD Kick-Off Call,Date
+FDD IRL Sent,Date
+DB Suitability / Redress Review Complete,Date
+RDD Data Book Complete,Date
+File Review Sample (non-DB) Complete,Date
+RDD Question Pack Response Received,Date
+FDD Additional Data Request Sent,Date
+Snapshot Email Circulated,Date
+FDD Question Pack Sent,Date
+FDD Question Pack Call,Date
+Lawyers Appointed,Date
+SPA Issued,Date
+SPA Mark-Up Received,Date
+HR and Ops DD Complete,Date
+FDD Report Drafted,Date
+RDD Report Drafted,Date
+FDD Report Reviewed,Date
+RDD Report Reviewed,Date
+LDD Finalised,Date
+FDD / RDD Reports Approved,Date
+AuA / Household,Text
+AuA / Client,Text
+Number of Clients,Text
+Number of Households,Text
+Average Age of Clients,Text
+Average Age of Clients (Weighted),Text
+Typical Initial Fee,Text
+Typical OAC % / Fixed Fees,Text
+Platforms,Text
+Number of Advisers Required,Text
+Number of Employed Advisors Retained,Text
+Number of Self-Employed Advisors Retained,Text
+Number of Paraplanners Retained,Text
+Number of Administrators Retained,Text
+Number of Other Staff Retained,Text
+Number of Staff Exiting on Completion,Text
+Number of Staff to be Redeployed to Group Roles,Text
+Recruitment Requirements,Text
+Contact 2 Name,Text
+Contact 2 Email,Text
+Contact 2 Phone,Text
+Contact 3 Name,Text
+Contact 3 Email,Text
+Contact 3 Phone,Text
+FCA / PI %,Text
+Variable Cost %,Text
+Fixed Costs,Text
+Defined Benefit Transfers,Text
+Defined Benefit Transfer Total (?),Text
+Perspective Regional Director old,Text
+Agreed Perspective Trading Style,Text
+Back Office System,Text
+Document Management System,Text
+Date Declined,Date
+Other player sold to (if known),Text
+Flowbird BI ID,Text
+Deal Lead (BI),Text
+Perspective EBITDA (Display Field),Text
+Value (display field),Text
+Assets Under Advice (display field),Text
+Forecast Recurring Income (display field),Text
+Completion Payment,Text
+Headline Consideration (display field),Text
+Database,Text
+Entreprise Value (?m),Text
+Recurring Income (?m),Text
+RI Checker,Text
+EBITDA (?m),Text
+Completion Payment (display field) ,Text
+People Team Lead,Text
+Adviser Contracts Sent,Date
+ELI Sent,Date
+ELI Received,Date
+TUPE Measures Sent,Date
+Instruction for Integration Kick Off Date,Date
+Data Meeting Held,Date
+Core Compliance CA Request Sent,Date
+First Data Request Response Received,Date
+Client Letter Sign Off Completed,Date
+Repapering Finalised and Agreed Date,Date
+Printing and Delivery Date,Date
+Confirmed Completion,Date
+Perspective Project Manager,Text
+Client Portal,Text
+AI Solutions,Text
+Data Team Lead,Text
+Confirmed Completion.,Text
+Remove,Text
+Consumer Duty Plan Signed Off,Text
+CiC Submitted,Text
+CiC Submitted Date,Date
+Deauthorisation Application Submitted,Date
+Deauthorisation Target Date,Date
+Deauthorisation Approved,Date
+Legal Team Lead,Text
+Deal Address,Text
+Perspective Regional Manager,Text
+Test,Text
+Deal Lead,Text

@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #F4F8FF;
+  --bg: #f2f2f2;
   --surface: #FFFFFF;
+  --nav: #1B2A4A;
   --text: #0F1D3B;
+  --text-muted: #6b7280;
   --accent: #0B3A86;
-  --border: #D1DCF0;
-  --radius: 8px;
-  --font-heading: 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --red: #C8102E;
+  --border: #e5e7eb;
+  --radius: 6px;
 }
 
 * {
@@ -20,6 +21,6 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-body);
+  font-family: system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
