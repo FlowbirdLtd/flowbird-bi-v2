@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDeals } from '../hooks/useDeals'
 import ExportModal from '../components/ExportModal'
 
-const TABS = ['All Deals', 'Completed', 'Exchanged', 'HoTs Signed', 'HoTs Issued', 'Offer Made', 'First Meeting Held', 'First Meeting Booked', 'Introduction', 'Declined']
+const TABS = ['All Deals', 'Completed', 'Exchanged', 'HoTs Signed', 'HoTs Issued', 'Offer Made', 'First Meeting Held', 'First Meeting Booked', 'Introduction', 'Declined', 'Archived']
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
@@ -61,7 +61,12 @@ export default function DealsPage() {
   })
 
   const filtered = deals.filter(d => {
-    const matchTab = activeTab === 'All Deals' || d.stage === activeTab
+    // Archived deals (archive_time set in Pipedrive) appear only under the
+    // Archived tab — every other tab shows active deals only.
+    const isArchived = !!d.archive_time
+    const matchTab = activeTab === 'Archived'
+      ? isArchived
+      : !isArchived && (activeTab === 'All Deals' || d.stage === activeTab)
     const matchSearch = !searchTerm || (d.title || '').toLowerCase().includes(searchTerm.toLowerCase())
     return matchTab && matchSearch
   })

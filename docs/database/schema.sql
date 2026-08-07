@@ -260,6 +260,7 @@ create table deals (
   -- ── Pipedrive / CRM activity metadata ────────────────────────────────────
   pipedrive_datetime      timestamptz,
   update_time             timestamptz,
+  archive_time            timestamptz,
   last_stage_change       text,
   next_activity_date      date,
   last_activity_date      date,

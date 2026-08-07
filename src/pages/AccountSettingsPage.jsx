@@ -27,7 +27,13 @@ const SEARCH_FIELDS = {
 
 const NAV_ITEMS = [
   { key: 'profile',      label: 'My Profile' },
-  { key: 'integrations', label: 'Integrations' },
+  {
+    key: 'integrations', label: 'Integrations',
+    children: [
+      { key: 'integrations-apis', label: 'APIs' },
+      { key: 'integrations-sync', label: 'Sync' },
+    ],
+  },
   { key: 'import',       label: 'Import' },
 ]
 
@@ -112,6 +118,7 @@ const DB_COLUMNS = {
     'perspective_project_manager','data_team_lead','client_portal','ai_solutions',
     'date_declined','loss_driver','reason_for_decline','reason_for_decline_detail','other_player_sold_to',
     'source_origin','source_channel','deal_lead_bi','flowbird_bi_id','database_record','remove_flag',
+    'archive_time',
   ],
 }
 
@@ -136,7 +143,7 @@ const DATE_COLUMNS = {
     'deauthorisation_approved','integration_kickoff_date','data_meeting_held',
     'core_compliance_ca_request_sent','first_data_request_response_received',
     'client_letter_sign_off_completed','repapering_finalised_date','printing_and_delivery_date',
-    'date_declined',
+    'date_declined','archive_time',
   ],
 }
 
@@ -247,6 +254,45 @@ function PrimaryBtn({ onClick, disabled, children, style = {} }) {
     >
       {children}
     </button>
+  )
+}
+
+// Pipedrive card header shared by the APIs and Sync panels
+function PipedriveCardHeader({ connected }) {
+  return (
+    <div style={{
+      padding: '14px 18px', background: '#f9f9f9',
+      borderBottom: '1px solid var(--border)',
+      display: 'flex', alignItems: 'center', gap: 12,
+    }}>
+      <div style={{
+        width: 36, height: 36, borderRadius: 6,
+        background: '#017737',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: '#fff', fontSize: 15, fontWeight: 800, flexShrink: 0,
+        letterSpacing: '-0.5px',
+      }}>
+        PD
+      </div>
+      <div>
+        <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>
+          Pipedrive
+        </div>
+        <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>
+          Sync your CRM data into Flowbird BI
+        </div>
+      </div>
+      {connected && (
+        <div style={{
+          marginLeft: 'auto', fontSize: 11, fontWeight: 600,
+          color: '#15803d', background: '#f0fdf4',
+          border: '1px solid #bbf7d0', borderRadius: 12,
+          padding: '3px 10px',
+        }}>
+          Connected
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -440,6 +486,7 @@ export default function AccountSettingsPage() {
   const [importMsg,      setImportMsg]      = useState(null)
   const [importing,      setImporting]      = useState(false)
   const [importProgress, setImportProgress] = useState(null)
+  const [importDragOver, setImportDragOver] = useState(false)
 
   const { data: importHistory = [] } = useQuery({
     queryKey: ['import_history'],
@@ -513,6 +560,22 @@ export default function AccountSettingsPage() {
     onError: (err) => setPipedriveMsg({ type: 'error', text: err.message }),
   })
 
+  const removeTokenMutation = useMutation({
+    mutationFn: async () => {
+      const { error } = await platform
+        .from('users')
+        .update({ pipedrive_api_token: null })
+        .eq('id', user.id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      setPipedriveToken('')
+      queryClient.invalidateQueries({ queryKey: ['users', user.id] })
+      setPipedriveMsg({ type: 'success', text: 'API token removed. Sync is disabled until a new token is saved.' })
+    },
+    onError: (err) => setPipedriveMsg({ type: 'error', text: err.message }),
+  })
+
   const syncMutation = useMutation({
     mutationFn: async (type) => {
       const { data, error } = await platform.functions.invoke('sync-pipedrive', { body: { type } })
@@ -550,9 +613,22 @@ export default function AccountSettingsPage() {
 
   const tokenSaved = !!profile?.pipedrive_api_token
 
-  function handleFileChange(e) {
-    const file = e.target.files?.[0]
+  function clearImportFile() {
+    setImportFileName(null)
+    setImportParsed(null)
+    setImportMappings({})
+    setImportMsg(null)
+    setImportProgress(null)
+  }
+
+  // Shared by the Choose File input and the drag-and-drop zone
+  function processImportFile(file) {
     if (!file) return
+    if (!/\.csv$/i.test(file.name) && file.type !== 'text/csv') {
+      setImportMsg({ type: 'error', text: 'Only CSV files can be imported.' })
+      return
+    }
+    setImportFileName(file.name)
     setImportMsg(null)
     setImportProgress(null)
     const reader = new FileReader()
@@ -708,24 +784,54 @@ export default function AccountSettingsPage() {
           borderRadius: 8, overflow: 'hidden',
         }}>
           {navItems.map((item, i) => {
-            const isActive = activeTab === item.key
+            // A parent with children is "active" when any of its children is
+            const isActive = item.children
+              ? item.children.some(c => c.key === activeTab)
+              : activeTab === item.key
+            const isLast = i === navItems.length - 1
             return (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => setActiveTab(item.key)}
-                style={{
-                  display: 'flex', alignItems: 'center', width: '100%',
-                  padding: '12px 16px', fontSize: 13, fontWeight: isActive ? 700 : 500,
-                  color: isActive ? 'var(--accent)' : 'var(--text)',
-                  background: isActive ? '#eff4ff' : 'transparent',
-                  border: 'none', borderBottom: i < navItems.length - 1 ? '1px solid var(--border)' : 'none',
-                  borderLeft: isActive ? '3px solid var(--accent)' : '3px solid transparent',
-                  cursor: 'pointer', textAlign: 'left',
-                }}
-              >
-                {item.label}
-              </button>
+              <div key={item.key}>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab(item.children ? item.children[0].key : item.key)}
+                  style={{
+                    display: 'flex', alignItems: 'center', width: '100%',
+                    padding: '12px 16px', fontSize: 13, fontWeight: isActive ? 700 : 500,
+                    color: isActive ? 'var(--accent)' : 'var(--text)',
+                    background: isActive && !item.children ? '#eff4ff' : 'transparent',
+                    border: 'none',
+                    borderBottom: !isLast || item.children ? '1px solid var(--border)' : 'none',
+                    borderLeft: isActive && !item.children ? '3px solid var(--accent)' : '3px solid transparent',
+                    cursor: 'pointer', textAlign: 'left',
+                  }}
+                >
+                  {item.label}
+                </button>
+                {item.children?.map((child, ci) => {
+                  const childActive = activeTab === child.key
+                  const childIsLast = isLast && ci === item.children.length - 1
+                  return (
+                    <button
+                      key={child.key}
+                      type="button"
+                      onClick={() => setActiveTab(child.key)}
+                      style={{
+                        display: 'flex', alignItems: 'center', width: '100%',
+                        padding: '10px 16px 10px 32px', fontSize: 13,
+                        fontWeight: childActive ? 700 : 500,
+                        color: childActive ? 'var(--accent)' : 'var(--text-muted)',
+                        background: childActive ? '#eff4ff' : 'transparent',
+                        border: 'none',
+                        borderBottom: !childIsLast ? '1px solid var(--border)' : 'none',
+                        borderLeft: childActive ? '3px solid var(--accent)' : '3px solid transparent',
+                        cursor: 'pointer', textAlign: 'left',
+                      }}
+                    >
+                      {child.label}
+                    </button>
+                  )
+                })}
+              </div>
             )
           })}
         </div>
@@ -824,54 +930,21 @@ export default function AccountSettingsPage() {
             </div>
           )}
 
-          {/* ── Integrations ───────────────────────────────────────────────── */}
-          {activeTab === 'integrations' && isDeveloper && (
+          {/* ── Integrations · APIs ────────────────────────────────────────── */}
+          {activeTab === 'integrations-apis' && isDeveloper && (
             <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 8 }}>
               <div style={{
                 padding: '14px 20px', background: '#f3f4f6',
                 borderBottom: '1px solid var(--border)',
                 borderRadius: '8px 8px 0 0', fontWeight: 700, fontSize: 15,
               }}>
-                Integrations
+                APIs
               </div>
               <div style={{ padding: '24px 24px 28px' }}>
 
                 <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
 
-                  {/* Pipedrive header */}
-                  <div style={{
-                    padding: '14px 18px', background: '#f9f9f9',
-                    borderBottom: '1px solid var(--border)',
-                    display: 'flex', alignItems: 'center', gap: 12,
-                  }}>
-                    <div style={{
-                      width: 36, height: 36, borderRadius: 6,
-                      background: '#017737',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#fff', fontSize: 15, fontWeight: 800, flexShrink: 0,
-                      letterSpacing: '-0.5px',
-                    }}>
-                      PD
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>
-                        Pipedrive
-                      </div>
-                      <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>
-                        Sync your CRM data into Flowbird BI
-                      </div>
-                    </div>
-                    {tokenSaved && (
-                      <div style={{
-                        marginLeft: 'auto', fontSize: 11, fontWeight: 600,
-                        color: '#15803d', background: '#f0fdf4',
-                        border: '1px solid #bbf7d0', borderRadius: 12,
-                        padding: '3px 10px',
-                      }}>
-                        Connected
-                      </div>
-                    )}
-                  </div>
+                  <PipedriveCardHeader connected={tokenSaved} />
 
                   <div style={{ padding: '18px 18px 22px' }}>
 
@@ -907,13 +980,56 @@ export default function AccountSettingsPage() {
 
                     <Feedback msg={pipedriveMsg} />
 
-                    <PrimaryBtn
-                      onClick={() => { setPipedriveMsg(null); saveTokenMutation.mutate() }}
-                      disabled={saveTokenMutation.isPending || !pipedriveToken.trim()}
-                      style={{ marginBottom: 22 }}
-                    >
-                      {saveTokenMutation.isPending ? 'Saving…' : 'Save Token'}
-                    </PrimaryBtn>
+                    <div style={{ display: 'flex', gap: 10 }}>
+                      <PrimaryBtn
+                        onClick={() => { setPipedriveMsg(null); saveTokenMutation.mutate() }}
+                        disabled={saveTokenMutation.isPending || !pipedriveToken.trim()}
+                      >
+                        {saveTokenMutation.isPending ? 'Saving…' : 'Save Token'}
+                      </PrimaryBtn>
+                      {tokenSaved && (
+                        <button
+                          type="button"
+                          onClick={() => { setPipedriveMsg(null); removeTokenMutation.mutate() }}
+                          disabled={removeTokenMutation.isPending}
+                          style={{
+                            background: '#fff', border: '1px solid #fca5a5', borderRadius: 4,
+                            color: 'var(--red)', padding: '9px 20px', fontSize: 13, fontWeight: 600,
+                            cursor: removeTokenMutation.isPending ? 'default' : 'pointer',
+                            opacity: removeTokenMutation.isPending ? 0.5 : 1,
+                          }}
+                        >
+                          {removeTokenMutation.isPending ? 'Removing…' : 'Remove Token'}
+                        </button>
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* ── Integrations · Sync ────────────────────────────────────────── */}
+          {activeTab === 'integrations-sync' && isDeveloper && (
+            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 8 }}>
+              <div style={{
+                padding: '14px 20px', background: '#f3f4f6',
+                borderBottom: '1px solid var(--border)',
+                borderRadius: '8px 8px 0 0', fontWeight: 700, fontSize: 15,
+              }}>
+                Sync
+              </div>
+              <div style={{ padding: '24px 24px 28px' }}>
+
+                <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+
+                  <PipedriveCardHeader connected={tokenSaved} />
+
+                  <div style={{ padding: '18px 18px 22px' }}>
+
+                    <Feedback msg={pipedriveMsg} />
 
                     {/* Per-object sync panel */}
                     <div style={{
@@ -981,7 +1097,7 @@ export default function AccountSettingsPage() {
 
                     {!tokenSaved && (
                       <p style={{ fontSize: 11, color: '#9ca3af', marginTop: 8, marginBottom: 0 }}>
-                        Save an API token above to enable sync.
+                        Save an API token in the APIs section to enable sync.
                       </p>
                     )}
 
@@ -1106,10 +1222,25 @@ export default function AccountSettingsPage() {
                   </select>
                 </div>
 
-                {/* File upload */}
+                {/* File upload — click or drag and drop */}
                 <div style={{ ...fieldWrap, marginBottom: 20 }}>
                   <label style={labelStyle}>CSV File</label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div
+                    onDragOver={e => { e.preventDefault(); setImportDragOver(true) }}
+                    onDragLeave={() => setImportDragOver(false)}
+                    onDrop={e => {
+                      e.preventDefault()
+                      setImportDragOver(false)
+                      processImportFile(e.dataTransfer.files?.[0])
+                    }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 12,
+                      padding: '18px 16px', borderRadius: 8,
+                      border: `2px dashed ${importDragOver ? 'var(--accent)' : 'var(--border)'}`,
+                      background: importDragOver ? '#eff4ff' : '#fafafa',
+                      transition: 'border-color 0.15s, background 0.15s',
+                    }}
+                  >
                     <label style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
                       background: '#111827', color: '#fff', borderRadius: 4,
@@ -1122,15 +1253,32 @@ export default function AccountSettingsPage() {
                         type="file"
                         accept=".csv,text/csv"
                         onChange={e => {
-                          handleFileChange(e)
-                          setImportFileName(e.target.files?.[0]?.name ?? null)
+                          processImportFile(e.target.files?.[0])
+                          e.target.value = ''
                         }}
                         style={{ display: 'none' }}
                       />
                     </label>
                     <span style={{ fontSize: 13, color: importFileName ? 'var(--text)' : 'var(--text-muted)' }}>
-                      {importFileName ?? 'No file chosen'}
+                      {importFileName ?? 'or drag and drop a CSV file here'}
                     </span>
+                    {importFileName && (
+                      <button
+                        type="button"
+                        onClick={clearImportFile}
+                        disabled={importing}
+                        title="Remove file"
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 5,
+                          background: '#fff', border: '1px solid #fca5a5', borderRadius: 4,
+                          color: 'var(--red)', padding: '4px 10px', fontSize: 12, fontWeight: 600,
+                          cursor: importing ? 'default' : 'pointer', opacity: importing ? 0.5 : 1,
+                          flexShrink: 0,
+                        }}
+                      >
+                        ✕ Remove
+                      </button>
+                    )}
                   </div>
                 </div>
 

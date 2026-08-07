@@ -88,6 +88,13 @@ Integrations), not as a function secret.
 | `sync-pipedrive`| Full + single-record sync of orgs/contacts/deals from Pipedrive|
 | `manage-user`   | Invite, edit, delete users (Admin/Developer only), self-update |
 
+`sync-pipedrive` calls Pipedrive's **API v2** for all record endpoints
+(deals, persons, organizations, stages, pipelines, search) — v1 record
+endpoints are deprecated end of July 2026. Field-definition endpoints
+(`dealFields`, `personFields`, `organizationFields`) and `/users` have no
+v2 equivalent and intentionally remain on v1; see the comment at the top
+of the function file.
+
 ## 6. Point the frontend at the new project
 
 `.env.local` in the project root:
@@ -113,8 +120,10 @@ values ('<auth-user-uuid>', 'Your Name', 'you@flowbird.co.uk',
         ARRAY['Developer'], 'active');
 ```
 
-3. Log in. Developer permission shows every feature (Admin sees Import but
-   not Integrations; Staff sees only My Profile and read-only pages).
+3. Log in. Developer permission shows every feature, including
+   Integrations (its own sub-menu: **APIs** for the Pipedrive token,
+   **Sync** for full/single-record sync). Admin sees Import but not
+   Integrations. Staff sees only My Profile and read-only pages.
 
 ## 8. Repopulate data
 
