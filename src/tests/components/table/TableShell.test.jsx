@@ -73,3 +73,15 @@ describe('TableShell', () => {
     expect(screen.getByRole('button', { name: /Export/ })).toBeInTheDocument()
   })
 })
+
+describe('TableShell notice', () => {
+  it('renders a page-level notice when given', () => {
+    renderShell({ notice: 'Delete failed: policy missing.' })
+    expect(screen.getByText('Delete failed: policy missing.')).toBeInTheDocument()
+  })
+
+  it('renders no notice element when none is given', () => {
+    renderShell()
+    expect(screen.queryByText(/Delete failed/)).not.toBeInTheDocument()
+  })
+})

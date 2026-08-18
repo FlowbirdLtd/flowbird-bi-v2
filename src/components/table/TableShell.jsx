@@ -9,10 +9,13 @@ import { useSyncedScroll } from './useSyncedScroll'
 /**
  * Card layout shared by every list page. Owns nothing entity-specific — change
  * the chrome here and all four list pages move together.
+ *
+ * `notice` is a page-level banner slot (e.g. a failed mutation). The shell owns
+ * how it looks so pages never restyle it.
  */
 export default function TableShell({
   title, subtitle, stats, tabs,
-  table, columns, getRowKey, onRowClick,
+  table, columns, getRowKey, onRowClick, notice,
   emptyMessage, searchPlaceholder, exportFilename,
   isLoading, error, headerAction,
 }) {
@@ -46,6 +49,15 @@ export default function TableShell({
         background: 'var(--surface)', border: '1px solid var(--line)',
         borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-md)', overflow: 'hidden',
       }}>
+        {notice && (
+          <div style={{
+            margin: '12px 16px 0', padding: '9px 12px', borderRadius: 6, fontSize: 13,
+            background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c',
+          }}>
+            {notice}
+          </div>
+        )}
+
         {tabs}
 
         <TableToolbar
