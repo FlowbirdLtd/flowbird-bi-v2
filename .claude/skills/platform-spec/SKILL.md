@@ -1,6 +1,6 @@
 ---
 name: platform-spec
-description: Build a platform-level specification document for an existing business-management platform. Establishes a shared vocabulary (intent ladder + data axis), catalogs every module by reading the router, sidebar, and database, and produces docs/spec/platform.md plus a folder layout for per-module docs. Invoke when the user says "spec this out", "build a platform spec", "I want a hierarchy for the whole app", or similar.
+description: Build a platform-level specification document for an existing business-management platform. Establishes a shared vocabulary (intent ladder + data axis), catalogs every module by reading the router, sidebar, and database, and produces docs/spec/platform.md plus a folder layout for per-module docs. Use whenever the task is creating or restructuring the platform-level spec or module hierarchy docs for the whole app.
 ---
 
 # Platform Spec

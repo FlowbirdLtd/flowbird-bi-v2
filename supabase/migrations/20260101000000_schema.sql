@@ -1,7 +1,11 @@
 -- Flowbird BI v2 – Supabase PostgreSQL Schema
 -- Current as of migration 006 (deals expanded columns)
 --
--- Run this on a fresh Supabase project to recreate the full database.
+-- Mirror of docs/database/schema.sql — the two must be kept in sync.
+-- This copy is what `supabase db reset` replays into the local stack;
+-- docs/database/schema.sql is what gets pasted into the hosted SQL Editor
+-- when rebuilding a remote project from scratch (see docs/database/SETUP.md).
+--
 -- Requires auth.users to exist (built-in to every Supabase project).
 
 -- ── Extensions ────────────────────────────────────────────────────────────────

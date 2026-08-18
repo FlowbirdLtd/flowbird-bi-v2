@@ -4,10 +4,17 @@
 -- Default password for all: Flowbird2024!
 --
 -- HOW TO RUN:
---   Supabase dashboard → SQL Editor → New query → paste → Run
+--   Hosted: Supabase dashboard → SQL Editor → New query → paste → Run
+--   Local:  runs automatically as the first seed file on `supabase db reset`
+--           (wired up in supabase/config.toml under [db.seed])
 --
 -- After running, all 10 users will appear in Authentication → Users
 -- and can log in at /login with their @pfgl.co.uk email + Flowbird2024!
+
+-- pgcrypto lives in the `extensions` schema (see schema.sql). The hosted SQL
+-- Editor already has it on the search_path; psql / db reset does not, so the
+-- bare crypt() and gen_salt() calls below would fail without this.
+set search_path = extensions, public;
 
 -- ============================================================
 -- STEP 1 – Auth users
@@ -152,3 +159,21 @@ insert into auth.identities (
   (gen_random_uuid(), 'd0000000-0000-0000-0000-000000000008', '{"sub":"d0000000-0000-0000-0000-000000000008","email":"james.taylor@pfgl.co.uk"}',     'email', 'james.taylor@pfgl.co.uk',     now(), now(), now()),
   (gen_random_uuid(), 'd0000000-0000-0000-0000-000000000009', '{"sub":"d0000000-0000-0000-0000-000000000009","email":"sarah.connor@pfgl.co.uk"}',     'email', 'sarah.connor@pfgl.co.uk',     now(), now(), now()),
   (gen_random_uuid(), 'd0000000-0000-0000-0000-000000000010', '{"sub":"d0000000-0000-0000-0000-000000000010","email":"michael.brown@pfgl.co.uk"}',    'email', 'michael.brown@pfgl.co.uk',    now(), now(), now());
+
+-- ============================================================
+-- STEP 3 – Normalise nullable GoTrue token columns
+-- ============================================================
+-- GoTrue scans these columns into non-nullable Go strings. Rows inserted
+-- directly into auth.users leave them NULL, which makes every login fail with
+-- 500 "Database error querying schema". Harmless on a hosted project, required
+-- locally — keep this last.
+update auth.users set
+  confirmation_token         = coalesce(confirmation_token, ''),
+  recovery_token             = coalesce(recovery_token, ''),
+  email_change               = coalesce(email_change, ''),
+  email_change_token_new     = coalesce(email_change_token_new, ''),
+  email_change_token_current = coalesce(email_change_token_current, ''),
+  phone_change               = coalesce(phone_change, ''),
+  phone_change_token         = coalesce(phone_change_token, ''),
+  reauthentication_token     = coalesce(reauthentication_token, '')
+where email like '%@pfgl.co.uk';
