@@ -16,10 +16,20 @@ function toNumber(value) {
   return Number.isFinite(n) ? n : null
 }
 
+/**
+ * Rounds to one decimal place of `unit` using integer division.
+ * Dividing first and calling toFixed loses the boundary case: 6_050_000 / 1e6
+ * is stored as 6.04999…, so (6.05).toFixed(1) is "6.0" and £6.05m would
+ * display as £6m. Dividing by unit/10 keeps the intermediate exact.
+ */
+function roundToTenth(n, unit) {
+  return Math.round(n / (unit / 10)) / 10
+}
+
 function gbpShort(n) {
   const abs = Math.abs(n)
-  if (abs >= 1e9) return '£' + (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'bn'
-  if (abs >= 1e6) return '£' + (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'm'
+  if (abs >= 1e9) return '£' + roundToTenth(n, 1e9) + 'bn'
+  if (abs >= 1e6) return '£' + roundToTenth(n, 1e6) + 'm'
   if (abs >= 1e3) return '£' + Math.round(n / 1e3) + 'k'
   return '£' + n.toLocaleString('en-GB')
 }

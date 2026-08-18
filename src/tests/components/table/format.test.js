@@ -67,3 +67,20 @@ describe('formatCell', () => {
     expect(EMPTY).toBe('—')
   })
 })
+
+describe('formatCell rounding boundaries', () => {
+  // 6.05m is not exactly representable as a double; dividing before rounding
+  // would silently display this as "£6m".
+  it('rounds a half-tenth of a million up', () => {
+    expect(formatCell(6050000, 'gbpShort')).toBe('£6.1m')
+  })
+
+  it('rounds a half-tenth of a billion up', () => {
+    expect(formatCell(1250000000, 'gbpShort')).toBe('£1.3bn')
+  })
+
+  it('drops a trailing zero decimal', () => {
+    expect(formatCell(214000000, 'gbpShort')).toBe('£214m')
+    expect(formatCell(2000000000, 'gbpShort')).toBe('£2bn')
+  })
+})
