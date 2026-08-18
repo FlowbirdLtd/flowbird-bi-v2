@@ -10,6 +10,31 @@
   --red: #C8102E;
   --border: #e5e7eb;
   --radius: 6px;
+
+  /* Table system — additive. Existing tokens above keep their meanings. */
+  --ground:      #F4F6FA;
+  --surface-alt: #FAFBFD;
+  --ink-soft:    #5A6580;
+  --ink-faint:   #8B94A8;
+  --line:        #E4E8F0;
+  --line-strong: #CFD6E4;
+  --accent-wash: #EDF2FC;
+  --shadow-sm:   0 1px 2px rgba(15, 29, 59, .06);
+  --shadow-md:   0 4px 16px -4px rgba(15, 29, 59, .12), 0 1px 3px rgba(15, 29, 59, .06);
+  --shadow-rail: 8px 0 12px -10px rgba(15, 29, 59, .30);
+  --radius-lg:   10px;
+  --radius-sm:   7px;
+
+  --font-ui:   'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-data: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Chip ramp. Follows pipeline progress; red is reserved for Declined. */
+  --chip-neutral-bg: #EEF1F6; --chip-neutral-fg: #4A5670;
+  --chip-blue-bg:    #E6EEFB; --chip-blue-fg:    #1D4FA3;
+  --chip-teal-bg:    #E0F1EE; --chip-teal-fg:    #10695C;
+  --chip-green-bg:   #E2F2E6; --chip-green-fg:   #1F6B36;
+  --chip-amber-bg:   #FBF0DD; --chip-amber-fg:   #8A5A10;
+  --chip-red-bg:     #FBE8EB; --chip-red-fg:     #A50E26;
 }
 
 * {
@@ -19,9 +44,9 @@
 }
 
 body {
-  background: var(--bg);
+  background: var(--ground);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
 }
 
