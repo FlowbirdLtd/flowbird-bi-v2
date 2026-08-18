@@ -21,3 +21,14 @@ if (!globalThis.localStorage) {
     })
   }
 }
+
+// jsdom does not implement ResizeObserver. The synced-scrollbar hook uses it to
+// re-measure when the table's width changes; under test nothing resizes, so a
+// no-op stub is enough to let the hook mount.
+if (!globalThis.ResizeObserver) {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}
