@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { getValue } from './format'
 import { sortRows } from './sorting'
 import { readHidden, writeHidden, storageKeyFor } from './columnStorage'
@@ -83,12 +83,9 @@ export function useTableState({
 
   const totalPages = Math.max(1, Math.ceil(filteredRows.length / perPage))
 
-  // Clamp rather than reset: a shrinking result set should land on the last
-  // page that still has rows, not throw the user back to the top.
-  useEffect(() => {
-    if (page > totalPages) setPage(totalPages)
-  }, [page, totalPages])
-
+  // Clamp during render rather than correcting in an effect: a shrinking result
+  // set should land on the last page that still has rows, and deriving it here
+  // avoids a second render pass. `page` is only ever read through `safePage`.
   const safePage = Math.min(page, totalPages)
   const start = (safePage - 1) * perPage
   const pageRows = filteredRows.slice(start, start + perPage)
