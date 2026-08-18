@@ -1,268 +1,57 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDeals } from '../hooks/useDeals'
-import ExportModal from '../components/ExportModal'
+import TableShell from '../components/table/TableShell'
+import TabRail from '../components/table/TabRail'
+import { useTableState } from '../components/table/useTableState'
+import { DEAL_COLUMNS, DEAL_TABS, dealFilter, dealStats } from '../features/deals/columns'
 
-const TABS = ['All Deals', 'Completed', 'Exchanged', 'HoTs Signed', 'HoTs Issued', 'Offer Made', 'First Meeting Held', 'First Meeting Booked', 'Introduction', 'Declined', 'Archived']
-
-function formatDate(dateStr) {
-  if (!dateStr) return ''
-  const d = new Date(dateStr)
-  return d.toLocaleDateString('en-GB')
-}
-
-function EyeIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  )
-}
-
-function DownloadIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" y1="15" x2="12" y2="3" />
-    </svg>
-  )
-}
+const SEARCH_KEYS = ['title', 'contact.name', 'owner', 'introductory_company', 'stage']
 
 export default function DealsPage() {
   const { data: deals = [], isLoading, isError, error } = useDeals()
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState('All Deals')
-  const [searchInput, setSearchInput] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(25)
-  const [showExport, setShowExport] = useState(false)
+  const [tab, setTab] = useState('All Deals')
 
-  // The table's horizontal scrollbar is shown ABOVE the table: a thin
-  // scroll strip whose inner width mirrors the table's scrollWidth, with
-  // scroll positions synced both ways. The table's own bottom scrollbar
-  // is hidden via the hide-h-scrollbar class.
-  const topScrollRef = useRef(null)
-  const topScrollInnerRef = useRef(null)
-  const tableScrollRef = useRef(null)
+  const filter = useMemo(() => dealFilter(tab), [tab])
 
-  useEffect(() => {
-    const container = tableScrollRef.current
-    const inner = topScrollInnerRef.current
-    if (!container || !inner) return
-    const update = () => { inner.style.width = container.scrollWidth + 'px' }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(container)
-    if (container.firstElementChild) ro.observe(container.firstElementChild)
-    return () => ro.disconnect()
+  const table = useTableState({
+    rows: deals,
+    columns: DEAL_COLUMNS,
+    storageKey: 'deals',
+    searchKeys: SEARCH_KEYS,
+    defaultSort: { key: 'value', dir: 'desc' },
+    defaultPerPage: 25,
+    filter,
   })
 
-  const filtered = deals.filter(d => {
-    // Archived deals (archive_time set in Pipedrive) appear only under the
-    // Archived tab — every other tab shows active deals only.
-    const isArchived = !!d.archive_time
-    const matchTab = activeTab === 'Archived'
-      ? isArchived
-      : !isArchived && (activeTab === 'All Deals' || d.stage === activeTab)
-    const matchSearch = !searchTerm || (d.title || '').toLowerCase().includes(searchTerm.toLowerCase())
-    return matchTab && matchSearch
-  })
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage))
-  const safePage = Math.min(currentPage, totalPages)
-  const start = (safePage - 1) * perPage
-  const paginated = filtered.slice(start, start + perPage)
-
-  function handleTabChange(tab) {
-    setActiveTab(tab)
-    setCurrentPage(1)
-  }
-
-  function handleSearch() {
-    setSearchTerm(searchInput)
-    setCurrentPage(1)
-  }
-
-  function handlePerPageChange(e) {
-    setPerPage(Number(e.target.value))
-    setCurrentPage(1)
-  }
+  const counts = useMemo(
+    () => Object.fromEntries(DEAL_TABS.map(t => [t, deals.filter(dealFilter(t)).length])),
+    [deals],
+  )
 
   return (
-    <div style={{ padding: 24 }}>
-      {showExport && (
-        <ExportModal data={filtered} filename="deals" onClose={() => setShowExport(false)} />
-      )}
-      <div style={{ background: '#fff', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
-        <div style={{ borderBottom: '1px solid var(--border)', overflowX: 'auto' }}>
-          <div style={{ display: 'flex', minWidth: 'max-content' }}>
-            {TABS.map(tab => (
-              <button
-                key={tab}
-                onClick={() => handleTabChange(tab)}
-                style={{
-                  padding: '10px 16px',
-                  border: 'none',
-                  borderBottom: activeTab === tab ? '3px solid var(--nav)' : '3px solid transparent',
-                  background: activeTab === tab ? 'var(--nav)' : '#fff',
-                  color: activeTab === tab ? '#fff' : 'var(--text)',
-                  fontWeight: 600,
-                  fontSize: 13,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid var(--border)' }}>
-          <input
-            value={searchInput}
-            onChange={e => setSearchInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
-            placeholder="Search deals..."
-            style={{ border: '1px solid var(--border)', borderRadius: 4, padding: '6px 10px', fontSize: 13, width: 240 }}
-          />
-          <button
-            onClick={handleSearch}
-            style={{ background: 'var(--nav)', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 14px', fontSize: 13, cursor: 'pointer', fontWeight: 600 }}
-          >
-            Search
-          </button>
-        </div>
-
-        <div style={{ padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border)' }}>
-          <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-            Showing {filtered.length === 0 ? 0 : start + 1}–{Math.min(start + perPage, filtered.length)} of {filtered.length}
-          </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button
-              onClick={() => setShowExport(true)}
-              style={{ background: 'var(--nav)', color: '#fff', border: 'none', borderRadius: 4, padding: '5px 12px', fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}
-            >
-              <DownloadIcon /> Export
-            </button>
-            <select value={perPage} onChange={handlePerPageChange} style={{ border: '1px solid var(--border)', borderRadius: 4, padding: '4px 8px', fontSize: 13 }}>
-              <option value={10}>10 per page</option>
-              <option value={25}>25 per page</option>
-              <option value={50}>50 per page</option>
-              <option value={100}>100 per page</option>
-            </select>
-            <select
-              value={safePage}
-              onChange={e => setCurrentPage(Number(e.target.value))}
-              style={{ border: '1px solid var(--border)', borderRadius: 4, padding: '4px 8px', fontSize: 13 }}
-            >
-              {Array.from({ length: totalPages }, (_, i) => (
-                <option key={i + 1} value={i + 1}>Page {i + 1}</option>
-              ))}
-            </select>
-            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>of {totalPages}</span>
-            <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={safePage <= 1}
-              style={{ border: '1px solid var(--border)', background: '#fff', borderRadius: 4, padding: '4px 8px', cursor: safePage <= 1 ? 'default' : 'pointer', opacity: safePage <= 1 ? 0.5 : 1 }}
-            >
-              &lt;
-            </button>
-            <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={safePage >= totalPages}
-              style={{ border: '1px solid var(--border)', background: '#fff', borderRadius: 4, padding: '4px 8px', cursor: safePage >= totalPages ? 'default' : 'pointer', opacity: safePage >= totalPages ? 0.5 : 1 }}
-            >
-              &gt;
-            </button>
-          </div>
-        </div>
-
-        {isLoading ? (
-          <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading...</div>
-        ) : isError ? (
-          <div style={{ padding: 32, background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, margin: 16, color: '#b91c1c', fontSize: 13 }}>
-            <strong>Database error:</strong> {error?.message}
-            <div style={{ marginTop: 8, color: '#6b7280' }}>Check that schema.sql, seed.sql, and policies.sql have all been run in Supabase.</div>
-          </div>
-        ) : (
-          <>
-            {/* Top horizontal scrollbar, synced with the table below */}
-            <div
-              ref={topScrollRef}
-              onScroll={() => {
-                if (tableScrollRef.current) tableScrollRef.current.scrollLeft = topScrollRef.current.scrollLeft
-              }}
-              style={{ overflowX: 'auto', overflowY: 'hidden', borderBottom: '1px solid var(--border)' }}
-            >
-              <div ref={topScrollInnerRef} style={{ height: 1 }} />
-            </div>
-            <div
-              ref={tableScrollRef}
-              className="hide-h-scrollbar"
-              onScroll={() => {
-                if (topScrollRef.current) topScrollRef.current.scrollLeft = tableScrollRef.current.scrollLeft
-              }}
-              style={{ overflowX: 'auto' }}
-            >
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid var(--border)' }}>
-                  {['View', 'Title', 'Value', 'Contact Name', 'Introductory Company', 'Stage', 'Owner', 'Latest Status (AC)', 'Exchanged Date', 'Complete Date', 'Assets Under Advice', 'Forecast Recurring Income', 'Completion Payment', 'Headline Consideration', 'EBITDA Multiple', 'Deal Address'].map(col => (
-                    <th key={col} style={{ padding: '9px 12px', textAlign: 'left', fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap', background: '#f9fafb', minWidth: col === 'Title' ? 260 : col === 'Latest Status (AC)' ? 300 : col === 'Deal Address' ? 300 : undefined }}>
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {paginated.map((deal, i) => (
-                  <tr
-                    key={deal.id}
-                    style={{ background: i % 2 === 0 ? '#fff' : '#f9fafb', borderBottom: '1px solid var(--border)' }}
-                    onMouseEnter={e => e.currentTarget.style.background = '#f0f4ff'}
-                    onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? '#fff' : '#f9fafb'}
-                  >
-                    <td style={{ padding: '8px 12px' }}>
-                      <button
-                        onClick={() => navigate(`/deals/${deal.id}`)}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--red)', display: 'flex', alignItems: 'center' }}
-                        title="View deal"
-                      >
-                        <EyeIcon />
-                      </button>
-                    </td>
-                    <td style={{ padding: '8px 12px', fontWeight: 500, minWidth: 260 }}>{deal.title}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.value}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.contact?.name || ''}</td>
-                    <td style={{ padding: '8px 12px' }}>{deal.introductory_company}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.stage}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.owner}</td>
-                    <td style={{ padding: '8px 12px' }}>{deal.latest_status_acquisition_committee}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{formatDate(deal.deal_exchanged_date)}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{formatDate(deal.deal_complete_date)}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.assets_under_advice}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.forecast_recurring_income}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.completion_payment}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.headline_consideration}</td>
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap' }}>{deal.ebitda_multiple}</td>
-                    <td style={{ padding: '8px 12px' }}>{deal.deal_address}</td>
-                  </tr>
-                ))}
-                {paginated.length === 0 && (
-                  <tr>
-                    <td colSpan={16} style={{ padding: 32, textAlign: 'center', color: 'var(--text-muted)' }}>No deals found.</td>
-                  </tr>
-                )}
-              </tbody>
-              </table>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+    <TableShell
+      title="Deals"
+      subtitle="Mirrored from Pipedrive"
+      stats={dealStats(table.filteredRows)}
+      tabs={
+        <TabRail
+          tabs={DEAL_TABS}
+          active={tab}
+          counts={counts}
+          onChange={next => { setTab(next); table.setPage(1) }}
+        />
+      }
+      table={table}
+      columns={DEAL_COLUMNS}
+      getRowKey={deal => deal.id}
+      onRowClick={deal => navigate(`/deals/${deal.id}`)}
+      emptyMessage="No deals found."
+      searchPlaceholder="Search deals, contacts, owners…"
+      exportFilename="deals"
+      isLoading={isLoading}
+      error={isError ? error : null}
+    />
   )
 }
