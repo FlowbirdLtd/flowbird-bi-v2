@@ -54,8 +54,9 @@ export default function LoginPage() {
       padding: 24,
     }}>
       <div style={{
-        background: '#fff',
-        borderRadius: 12,
+        background: 'var(--surface)',
+        border: '1px solid var(--line)',
+        borderRadius: 'var(--radius-lg)',
         boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
         width: '100%',
         maxWidth: 420,
@@ -83,7 +84,7 @@ export default function LoginPage() {
               <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--nav)', marginBottom: 6 }}>
                 Sign in to your account
               </h1>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 28 }}>
+              <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 28 }}>
                 Enter your credentials to access the platform.
               </p>
 
@@ -95,9 +96,9 @@ export default function LoginPage() {
                     value={form.email}
                     onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                     placeholder="you@example.com"
-                    style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '10px 12px', fontSize: 14, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+                    style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)', padding: '10px 12px', fontSize: 14, outline: 'none', width: '100%', boxSizing: 'border-box' }}
                     onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                    onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                    onBlur={e => e.target.style.borderColor = 'var(--line)'}
                   />
                 </div>
 
@@ -117,21 +118,21 @@ export default function LoginPage() {
                     value={form.password}
                     onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                     placeholder="••••••••"
-                    style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '10px 12px', fontSize: 14, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+                    style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)', padding: '10px 12px', fontSize: 14, outline: 'none', width: '100%', boxSizing: 'border-box' }}
                     onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                    onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                    onBlur={e => e.target.style.borderColor = 'var(--line)'}
                   />
                 </div>
 
                 {error && (
-                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, padding: '10px 12px', fontSize: 13, color: '#b91c1c' }}>
+                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 'var(--radius-sm)', padding: '10px 12px', fontSize: 13, color: '#b91c1c' }}>
                     {error}
                   </div>
                 )}
 
                 <button
                   type="submit" disabled={loading}
-                  style={{ background: loading ? '#6b7280' : 'var(--nav)', color: '#fff', border: 'none', borderRadius: 6, padding: '12px', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', marginTop: 4, transition: 'background 0.15s' }}
+                  style={{ background: loading ? 'var(--ink-soft)' : 'var(--nav)', color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)', padding: '12px', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', marginTop: 4, transition: 'background 0.15s' }}
                 >
                   {loading ? 'Signing in…' : 'Sign In'}
                 </button>
@@ -145,7 +146,7 @@ export default function LoginPage() {
               <h1 style={{ fontSize: 20, fontWeight: 700, color: 'var(--nav)', marginBottom: 6 }}>
                 Reset your password
               </h1>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 28 }}>
+              <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 28 }}>
                 Enter your email and we'll send you a reset link.
               </p>
 
@@ -157,21 +158,21 @@ export default function LoginPage() {
                     value={resetEmail}
                     onChange={e => setResetEmail(e.target.value)}
                     placeholder="you@example.com"
-                    style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '10px 12px', fontSize: 14, outline: 'none', width: '100%', boxSizing: 'border-box' }}
+                    style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)', padding: '10px 12px', fontSize: 14, outline: 'none', width: '100%', boxSizing: 'border-box' }}
                     onFocus={e => e.target.style.borderColor = 'var(--accent)'}
-                    onBlur={e => e.target.style.borderColor = 'var(--border)'}
+                    onBlur={e => e.target.style.borderColor = 'var(--line)'}
                   />
                 </div>
 
                 {error && (
-                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 6, padding: '10px 12px', fontSize: 13, color: '#b91c1c' }}>
+                  <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 'var(--radius-sm)', padding: '10px 12px', fontSize: 13, color: '#b91c1c' }}>
                     {error}
                   </div>
                 )}
 
                 <button
                   type="submit" disabled={loading}
-                  style={{ background: loading ? '#6b7280' : 'var(--nav)', color: '#fff', border: 'none', borderRadius: 6, padding: '12px', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s' }}
+                  style={{ background: loading ? 'var(--ink-soft)' : 'var(--nav)', color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)', padding: '12px', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', transition: 'background 0.15s' }}
                 >
                   {loading ? 'Sending…' : 'Send Reset Email'}
                 </button>
@@ -196,13 +197,13 @@ export default function LoginPage() {
               <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--nav)', marginBottom: 10 }}>
                 Check your email
               </h2>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 4 }}>
+              <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 4 }}>
                 We've sent a password reset link to
               </p>
               <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', marginBottom: 20 }}>
                 {resetEmail}
               </p>
-              <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 28 }}>
+              <p style={{ fontSize: 12, color: 'var(--ink-soft)', marginBottom: 28 }}>
                 Click the link in the email to choose a new password. The link expires in 1 hour.
               </p>
               <button
@@ -217,7 +218,7 @@ export default function LoginPage() {
 
         </div>
 
-        <div style={{ borderTop: '1px solid var(--border)', padding: '14px 32px', textAlign: 'center', fontSize: 12, color: 'var(--text-muted)' }}>
+        <div style={{ borderTop: '1px solid var(--line)', padding: '14px 32px', textAlign: 'center', fontSize: 12, color: 'var(--ink-soft)' }}>
           © Flowbird BI · Perspective Financial
         </div>
       </div>

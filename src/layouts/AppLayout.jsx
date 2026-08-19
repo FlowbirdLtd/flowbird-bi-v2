@@ -27,19 +27,20 @@ export default function AppLayout({ children }) {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--ground)' }}>
       <header style={{
         background: 'var(--nav)',
         height: 60,
         display: 'flex',
         alignItems: 'center',
-        padding: '0 20px',
+        padding: '0 24px',
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         zIndex: 100,
         gap: 32,
+        boxShadow: 'var(--shadow-md)',
       }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0, textDecoration: 'none' }}>
           <img src={logo} alt="Logo" style={{ height: 36, width: 'auto' }} />
@@ -89,14 +90,36 @@ export default function AppLayout({ children }) {
           ))}
         </nav>
 
-        <div style={{ color: '#fff', fontSize: 12, whiteSpace: 'nowrap', flexShrink: 0 }}>
-          Logged in as {user?.email ?? ''}
-          {' - '}
-          <Link to="/account-settings" style={{ color: '#fff', textDecoration: 'underline' }}>Account Settings</Link>
-          {' - '}
-          <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={handleSignOut}>
-            Log Out
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          fontSize: 12, whiteSpace: 'nowrap', flexShrink: 0,
+        }}>
+          <span style={{ color: 'rgba(255,255,255,0.7)' }}>
+            {user?.email ?? ''}
           </span>
+
+          <Link
+            to="/account-settings"
+            style={{
+              color: '#fff', textDecoration: 'none', fontWeight: 600,
+              fontSize: 12, padding: '6px 11px', borderRadius: 'var(--radius-sm)',
+              border: '1px solid rgba(255,255,255,0.28)', background: 'rgba(255,255,255,0.06)',
+            }}
+          >
+            Account Settings
+          </Link>
+
+          <button
+            type="button"
+            onClick={handleSignOut}
+            style={{
+              font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+              color: '#fff', background: 'transparent', border: 'none',
+              padding: '6px 4px', textDecoration: 'underline',
+            }}
+          >
+            Log Out
+          </button>
         </div>
       </header>
 

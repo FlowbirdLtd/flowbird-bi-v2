@@ -16,3 +16,6 @@ docs/Screenshots
 docs/Test Files
 docs/database/SupaBase_Guide_ReadMe.txt
 docs/database/migrations
+
+# Browser automation scratch output
+.playwright-cli/

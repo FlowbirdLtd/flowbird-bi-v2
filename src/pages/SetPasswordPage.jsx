@@ -57,7 +57,7 @@ export default function SetPasswordPage() {
   }
 
   const inputStyle = {
-    width: '100%', border: '1px solid var(--border)', borderRadius: 4,
+    width: '100%', border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)',
     padding: '9px 12px', fontSize: 14, boxSizing: 'border-box',
   }
 
@@ -66,9 +66,11 @@ export default function SetPasswordPage() {
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #1B2A4A 0%, #0B3A86 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 24,
     }}>
       <div style={{
-        background: '#fff', borderRadius: 8, width: 420, padding: '40px 40px 36px',
+        background: 'var(--surface)', border: '1px solid var(--line)',
+        borderRadius: 'var(--radius-lg)', width: 420, padding: '40px 40px 36px',
         boxShadow: '0 8px 40px rgba(0,0,0,0.25)',
       }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
@@ -87,7 +89,7 @@ export default function SetPasswordPage() {
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#166534', marginBottom: 8 }}>
               Password set successfully
             </h2>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)' }}>
               Redirecting you to the login page…
             </p>
           </div>
@@ -97,7 +99,7 @@ export default function SetPasswordPage() {
             <p style={{ fontSize: 14, color: 'var(--text)', marginBottom: 12 }}>
               Verifying your invitation link…
             </p>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: 12, color: 'var(--ink-soft)' }}>
               If this page stays here, your link may have expired.
               Ask an admin to send a new invitation.
             </p>
@@ -105,16 +107,16 @@ export default function SetPasswordPage() {
 
         ) : (
           <>
-            <h2 style={{ fontSize: 20, fontWeight: 700, textAlign: 'center', marginBottom: 6 }}>
+            <h2 style={{ fontSize: 20, fontWeight: 700, textAlign: 'center', marginBottom: 6, color: 'var(--text)' }}>
               Set your password
             </h2>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', textAlign: 'center', marginBottom: 28 }}>
+            <p style={{ fontSize: 13, color: 'var(--ink-soft)', textAlign: 'center', marginBottom: 28 }}>
               Choose a password to complete your account setup.
             </p>
 
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: 16 }}>
-                <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 5 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 5, color: 'var(--text)' }}>
                   New Password
                 </label>
                 <input
@@ -128,7 +130,7 @@ export default function SetPasswordPage() {
               </div>
 
               <div style={{ marginBottom: 20 }}>
-                <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 5 }}>
+                <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 5, color: 'var(--text)' }}>
                   Confirm Password
                 </label>
                 <input
@@ -143,7 +145,7 @@ export default function SetPasswordPage() {
 
               {error && (
                 <div style={{
-                  background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 4,
+                  background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 'var(--radius-sm)',
                   padding: '8px 12px', fontSize: 13, color: '#b91c1c', marginBottom: 16,
                 }}>
                   {error}
@@ -155,7 +157,7 @@ export default function SetPasswordPage() {
                 disabled={loading}
                 style={{
                   width: '100%', background: 'var(--nav)', color: '#fff',
-                  border: 'none', borderRadius: 4, padding: '10px', fontSize: 14,
+                  border: 'none', borderRadius: 'var(--radius-sm)', padding: '10px', fontSize: 14,
                   cursor: loading ? 'default' : 'pointer', fontWeight: 700,
                   opacity: loading ? 0.8 : 1,
                 }}

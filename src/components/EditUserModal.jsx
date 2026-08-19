@@ -62,17 +62,22 @@ export default function EditUserModal({ user, onClose }) {
   }
 
   const inputStyle = {
-    border: '1px solid var(--border)', borderRadius: 4,
+    border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)',
     padding: '8px 10px', fontSize: 13, width: '100%', boxSizing: 'border-box',
+    background: 'var(--surface)', color: 'var(--text)',
   }
   const errStyle = { color: '#b91c1c', fontSize: 11, marginTop: 3 }
-  const labelStyle = { fontSize: 13, fontWeight: 700, marginBottom: 6, display: 'block' }
+  const labelStyle = {
+    fontFamily: 'var(--font-data)', fontSize: 10.5, fontWeight: 600,
+    letterSpacing: '.085em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+    marginBottom: 7, display: 'block',
+  }
 
   return (
     <div
       style={{
         position: 'fixed', inset: 0,
-        background: 'rgba(0,0,0,0.5)',
+        background: 'rgba(15, 29, 59, 0.45)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         zIndex: 1000,
       }}
@@ -80,23 +85,24 @@ export default function EditUserModal({ user, onClose }) {
     >
       <div
         style={{
-          background: '#fff', borderRadius: 8, width: 540,
-          boxShadow: '0 8px 40px rgba(0,0,0,0.22)',
-          maxHeight: '90vh', overflowY: 'auto',
+          background: 'var(--surface)', border: '1px solid var(--line)',
+          borderRadius: 'var(--radius-lg)', width: 540,
+          boxShadow: 'var(--shadow-md)',
+          maxHeight: '90vh', overflowY: 'auto', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
       >
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '14px 20px', background: '#f3f4f6',
-          borderBottom: '1px solid var(--border)', borderRadius: '8px 8px 0 0',
+          padding: '14px 20px', background: 'var(--surface-alt)',
+          borderBottom: '1px solid var(--line)',
         }}>
-          <span style={{ fontWeight: 700, fontSize: 15 }}>Edit User</span>
+          <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>Edit User</span>
           <button
             onClick={onClose}
             style={{
-              background: '#9ca3af', border: 'none', borderRadius: '50%',
-              width: 26, height: 26, cursor: 'pointer', color: '#fff',
+              background: 'var(--line-strong)', border: 'none', borderRadius: '50%',
+              width: 26, height: 26, cursor: 'pointer', color: 'var(--surface)',
               fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: 700,
             }}
@@ -106,7 +112,7 @@ export default function EditUserModal({ user, onClose }) {
         </div>
 
         <form onSubmit={handleSubmit} style={{ padding: '28px 32px 32px' }}>
-          <h2 style={{ fontSize: 22, fontWeight: 400, marginBottom: 24, color: 'var(--text)' }}>
+          <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24, color: 'var(--text)' }}>
             Edit User
           </h2>
 
@@ -153,7 +159,7 @@ export default function EditUserModal({ user, onClose }) {
             <label style={labelStyle}>User Permissions</label>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {PERMISSIONS.map(p => (
-                <label key={p} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}>
+                <label key={p} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: 'var(--text)' }}>
                   <input
                     type="radio"
                     name="user-permission"
@@ -170,7 +176,7 @@ export default function EditUserModal({ user, onClose }) {
 
           {editMutation.isError && (
             <div style={{
-              background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 4,
+              background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 'var(--radius-sm)',
               padding: '8px 12px', fontSize: 13, color: '#b91c1c', marginBottom: 16,
             }}>
               {editMutation.error?.message}
@@ -182,8 +188,8 @@ export default function EditUserModal({ user, onClose }) {
               type="submit"
               disabled={editMutation.isPending}
               style={{
-                background: editMutation.isPending ? '#374151' : '#111827',
-                color: '#fff', border: 'none', borderRadius: 4,
+                background: editMutation.isPending ? 'var(--ink-soft)' : 'var(--nav)',
+                color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)',
                 padding: '10px 28px', fontSize: 14,
                 cursor: editMutation.isPending ? 'default' : 'pointer',
                 fontWeight: 600,
@@ -196,8 +202,8 @@ export default function EditUserModal({ user, onClose }) {
               onClick={onClose}
               disabled={editMutation.isPending}
               style={{
-                background: '#fff', color: 'var(--text)', border: '1px solid var(--border)',
-                borderRadius: 4, padding: '10px 20px', fontSize: 14,
+                background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--line-strong)',
+                borderRadius: 'var(--radius-sm)', padding: '10px 20px', fontSize: 14,
                 cursor: editMutation.isPending ? 'default' : 'pointer', fontWeight: 500,
               }}
             >

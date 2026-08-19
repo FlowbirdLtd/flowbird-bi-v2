@@ -51,7 +51,7 @@ export default function ExportModal({ data, filename, onClose }) {
     <div
       style={{
         position: 'fixed', inset: 0,
-        background: 'rgba(0,0,0,0.4)',
+        background: 'rgba(15, 29, 59, 0.4)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         zIndex: 1000,
       }}
@@ -59,21 +59,22 @@ export default function ExportModal({ data, filename, onClose }) {
     >
       <div
         style={{
-          background: '#fff', borderRadius: 8, width: 420,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+          background: 'var(--surface)', border: '1px solid var(--line)',
+          borderRadius: 'var(--radius-lg)', width: 420,
+          boxShadow: 'var(--shadow-md)', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
       >
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '16px 20px', borderBottom: '1px solid var(--border)',
-          background: '#f9fafb', borderRadius: '8px 8px 0 0',
+          padding: '16px 20px', borderBottom: '1px solid var(--line)',
+          background: 'var(--surface-alt)',
         }}>
-          <span style={{ fontWeight: 700, fontSize: 16 }}>Export Data</span>
+          <span style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)' }}>Export Data</span>
           <button
             onClick={onClose}
             style={{
-              background: '#e5e7eb', border: 'none', borderRadius: '50%',
+              background: 'var(--line)', border: 'none', borderRadius: '50%',
               width: 28, height: 28, cursor: 'pointer',
               fontSize: 16, color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
@@ -83,29 +84,33 @@ export default function ExportModal({ data, filename, onClose }) {
         </div>
 
         <div style={{ padding: '20px 24px 28px' }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', marginBottom: 16 }}>
-            Select the format to export the data in:
+          <p style={{
+            fontFamily: 'var(--font-data)', fontSize: 10.5, fontWeight: 600,
+            letterSpacing: '.085em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+            marginBottom: 12,
+          }}>
+            Select a format
           </p>
-          <ul style={{ listStyle: 'disc', paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { label: 'Commas (.csv)', format: 'csv' },
               { label: 'Tabs (.txt)',   format: 'txt' },
               { label: 'JSON',          format: 'json' },
             ].map(({ label, format }) => (
-              <li key={format}>
-                <button
-                  onClick={() => handleExport(format)}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    color: 'var(--accent)', fontSize: 13,
-                    textDecoration: 'underline', padding: 0,
-                  }}
-                >
-                  {label}
-                </button>
-              </li>
+              <button
+                key={format}
+                onClick={() => handleExport(format)}
+                style={{
+                  font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                  textAlign: 'left', color: 'var(--text)',
+                  background: 'var(--surface-alt)', border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius-sm)', padding: '9px 13px',
+                }}
+              >
+                {label}
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </div>

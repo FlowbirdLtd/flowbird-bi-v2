@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { DEAL_COLUMNS, stageTone, dealFilter, dealStats } from '@/features/deals/columns'
+import { DEAL_COLUMNS, DEAL_STAGES, DEAL_TABS, stageTone, dealFilter, dealStats } from '@/features/deals/columns'
 
 describe('DEAL_COLUMNS', () => {
   it('pins exactly one column', () => {
@@ -87,5 +87,23 @@ describe('dealStats', () => {
 
   it('handles an empty set without dividing by zero', () => {
     expect(dealStats([]).map(s => s.value)).toEqual(['0', null, null, null])
+  })
+})
+
+describe('DEAL_STAGES', () => {
+  it('reads left-to-right in pipeline order, not tab order', () => {
+    expect(DEAL_STAGES.slice(0, 4)).toEqual([
+      'Introduction', 'First Meeting Booked', 'First Meeting Held', 'Offer Made',
+    ])
+  })
+
+  it('ends on the terminal states rather than leading with them', () => {
+    expect(DEAL_STAGES.slice(-2)).toEqual(['Completed', 'Declined'])
+  })
+
+  it('carries only real stages — never the All Deals or Archived tabs', () => {
+    expect(DEAL_STAGES).not.toContain('All Deals')
+    expect(DEAL_STAGES).not.toContain('Archived')
+    expect(DEAL_STAGES).toHaveLength(DEAL_TABS.length - 2)
   })
 })

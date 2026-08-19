@@ -22,14 +22,15 @@ function ConfirmDeleteModal({ user, onCancel, onConfirm, isDeleting }) {
     >
       <div
         style={{
-          background: '#fff', borderRadius: 8, width: 420,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+          background: 'var(--surface)', border: '1px solid var(--line)',
+          borderRadius: 'var(--radius-lg)', width: 420,
+          boxShadow: 'var(--shadow-md)', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
       >
         <div style={{
-          padding: '16px 20px', borderBottom: '1px solid var(--border)',
-          background: '#fef2f2', borderRadius: '8px 8px 0 0',
+          padding: '16px 20px', borderBottom: '1px solid var(--line)',
+          background: '#fef2f2',
           display: 'flex', alignItems: 'center', gap: 10,
         }}>
           <span style={{ fontSize: 20 }}>⚠</span>
@@ -40,22 +41,22 @@ function ConfirmDeleteModal({ user, onCancel, onConfirm, isDeleting }) {
           <p style={{ fontSize: 14, color: 'var(--text)', marginBottom: 6 }}>
             Are you sure you want to delete <strong>{user.name}</strong>?
           </p>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 0 }}>
+          <p style={{ fontSize: 13, color: 'var(--ink-soft)', marginBottom: 0 }}>
             {user.email} &mdash; This will remove their profile and access from the platform. This action cannot be undone.
           </p>
         </div>
 
         <div style={{
-          padding: '12px 20px', borderTop: '1px solid var(--border)',
+          padding: '12px 20px', borderTop: '1px solid var(--line)',
           display: 'flex', justifyContent: 'flex-end', gap: 8,
-          background: '#f9fafb', borderRadius: '0 0 8px 8px',
+          background: 'var(--surface-alt)',
         }}>
           <button
             onClick={onCancel}
             disabled={isDeleting}
             style={{
-              background: '#fff', color: 'var(--text)', border: '1px solid var(--border)',
-              borderRadius: 4, padding: '7px 16px', fontSize: 13, cursor: 'pointer', fontWeight: 500,
+              background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--line-strong)',
+              borderRadius: 'var(--radius-sm)', padding: '7px 16px', fontSize: 13, cursor: 'pointer', fontWeight: 500,
             }}
           >
             Cancel
@@ -65,7 +66,7 @@ function ConfirmDeleteModal({ user, onCancel, onConfirm, isDeleting }) {
             disabled={isDeleting}
             style={{
               background: isDeleting ? '#fca5a5' : 'var(--red)', color: '#fff',
-              border: 'none', borderRadius: 4, padding: '7px 16px',
+              border: 'none', borderRadius: 'var(--radius-sm)', padding: '7px 16px',
               fontSize: 13, cursor: isDeleting ? 'default' : 'pointer', fontWeight: 700,
             }}
           >

@@ -25,6 +25,19 @@ export const DEAL_TABS = [
 ]
 
 /**
+ * Board columns, in pipeline order. Derived from DEAL_TABS so the two lists can
+ * never drift, but reordered: the tabs run newest-stage-first, whereas a board
+ * has to read left-to-right the way a deal actually progresses. Declined is a
+ * terminal state rather than a step, so it sits at the end instead of leading.
+ */
+const NOT_A_STAGE = ['All Deals', 'Archived']
+
+export const DEAL_STAGES = [
+  ...DEAL_TABS.filter(tab => !NOT_A_STAGE.includes(tab) && tab !== 'Declined').reverse(),
+  'Declined',
+]
+
+/**
  * Archived is driven by archive_time being set in Pipedrive. Archived deals
  * appear under the Archived tab and nowhere else.
  */

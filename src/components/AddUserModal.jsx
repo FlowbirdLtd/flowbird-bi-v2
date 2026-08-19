@@ -58,17 +58,22 @@ export default function AddUserModal({ onClose }) {
   }
 
   const inputStyle = {
-    border: '1px solid var(--border)', borderRadius: 4,
+    border: '1px solid var(--line)', borderRadius: 'var(--radius-sm)',
     padding: '8px 10px', fontSize: 13, width: '100%', boxSizing: 'border-box',
+    background: 'var(--surface)', color: 'var(--text)',
   }
   const errStyle = { color: '#b91c1c', fontSize: 11, marginTop: 3 }
-  const labelStyle = { fontSize: 13, fontWeight: 700, marginBottom: 6, display: 'block' }
+  const labelStyle = {
+    fontFamily: 'var(--font-data)', fontSize: 10.5, fontWeight: 600,
+    letterSpacing: '.085em', textTransform: 'uppercase', color: 'var(--ink-faint)',
+    marginBottom: 7, display: 'block',
+  }
 
   return (
     <div
       style={{
         position: 'fixed', inset: 0,
-        background: 'rgba(0,0,0,0.5)',
+        background: 'rgba(15, 29, 59, 0.45)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         zIndex: 1000,
       }}
@@ -76,24 +81,25 @@ export default function AddUserModal({ onClose }) {
     >
       <div
         style={{
-          background: '#fff', borderRadius: 8, width: 540,
-          boxShadow: '0 8px 40px rgba(0,0,0,0.22)',
-          maxHeight: '90vh', overflowY: 'auto',
+          background: 'var(--surface)', border: '1px solid var(--line)',
+          borderRadius: 'var(--radius-lg)', width: 540,
+          boxShadow: 'var(--shadow-md)',
+          maxHeight: '90vh', overflowY: 'auto', overflow: 'hidden',
         }}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '14px 20px', background: '#f3f4f6',
-          borderBottom: '1px solid var(--border)', borderRadius: '8px 8px 0 0',
+          padding: '14px 20px', background: 'var(--surface-alt)',
+          borderBottom: '1px solid var(--line)',
         }}>
-          <span style={{ fontWeight: 700, fontSize: 15 }}>Add User</span>
+          <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>Add User</span>
           <button
             onClick={onClose}
             style={{
-              background: '#9ca3af', border: 'none', borderRadius: '50%',
-              width: 26, height: 26, cursor: 'pointer', color: '#fff',
+              background: 'var(--line-strong)', border: 'none', borderRadius: '50%',
+              width: 26, height: 26, cursor: 'pointer', color: 'var(--surface)',
               fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: 700,
             }}
@@ -107,7 +113,7 @@ export default function AddUserModal({ onClose }) {
           <div style={{ padding: '32px 32px 28px' }}>
             <div style={{
               background: '#f0fdf4', border: '1px solid #bbf7d0',
-              borderRadius: 6, padding: '20px 24px', marginBottom: 24,
+              borderRadius: 'var(--radius-sm)', padding: '20px 24px', marginBottom: 24,
             }}>
               <p style={{ fontWeight: 700, color: '#166534', fontSize: 15, marginBottom: 8 }}>
                 Invitation sent
@@ -123,7 +129,7 @@ export default function AddUserModal({ onClose }) {
               onClick={onClose}
               style={{
                 background: 'var(--nav)', color: '#fff', border: 'none',
-                borderRadius: 4, padding: '8px 20px', fontSize: 13,
+                borderRadius: 'var(--radius-sm)', padding: '8px 20px', fontSize: 13,
                 cursor: 'pointer', fontWeight: 600,
               }}
             >
@@ -132,7 +138,7 @@ export default function AddUserModal({ onClose }) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ padding: '28px 32px 32px' }}>
-            <h2 style={{ fontSize: 22, fontWeight: 400, marginBottom: 24, color: 'var(--text)' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24, color: 'var(--text)' }}>
               Add User
             </h2>
 
@@ -182,7 +188,7 @@ export default function AddUserModal({ onClose }) {
               <label style={labelStyle}>User Permissions</label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {PERMISSIONS.map(p => (
-                  <label key={p} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13 }}>
+                  <label key={p} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: 'var(--text)' }}>
                     <input
                       type="radio"
                       name="user-permission"
@@ -195,14 +201,14 @@ export default function AddUserModal({ onClose }) {
                 ))}
               </div>
               {errors.permissions && <div style={errStyle}>{errors.permissions}</div>}
-              <p style={{ fontSize: 12, marginTop: 10, color: 'var(--text)' }}>
+              <p style={{ fontSize: 12, marginTop: 10, color: 'var(--ink-soft)' }}>
                 <strong><em>Admin</em></strong> <em>have the ability to add and remove <strong>Users</strong>.</em>
               </p>
             </div>
 
             {addMutation.isError && (
               <div style={{
-                background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 4,
+                background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 'var(--radius-sm)',
                 padding: '8px 12px', fontSize: 13, color: '#b91c1c', marginBottom: 16,
               }}>
                 {addMutation.error?.message}
@@ -213,8 +219,8 @@ export default function AddUserModal({ onClose }) {
               type="submit"
               disabled={addMutation.isPending}
               style={{
-                background: addMutation.isPending ? '#374151' : '#111827',
-                color: '#fff', border: 'none', borderRadius: 4,
+                background: addMutation.isPending ? 'var(--ink-soft)' : 'var(--nav)',
+                color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)',
                 padding: '10px 28px', fontSize: 14,
                 cursor: addMutation.isPending ? 'default' : 'pointer',
                 fontWeight: 600,
