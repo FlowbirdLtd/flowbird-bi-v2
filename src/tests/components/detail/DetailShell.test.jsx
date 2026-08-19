@@ -7,22 +7,33 @@ import DetailShell from '@/components/detail/DetailShell'
 const SECTIONS = [
   {
     title: 'Summary',
-    fields: [
+    groups: [{ fields: [
       { key: 'title', label: 'Title', type: 'text' },
       { key: 'value', label: 'Value', type: 'gbp' },
       { key: 'expected_close_date', label: 'Expected Close Date', type: 'date' },
       { key: 'notes', label: 'Notes', type: 'text' },
-    ],
+    ] }],
   },
   {
     title: 'Empty Section',
-    fields: [
+    groups: [{ fields: [
       { key: 'ghost', label: 'Ghost Field', type: 'text' },
-    ],
+    ] }],
   },
 ]
 
-const ROW = { title: 'Ashcombe Wealth', value: '1850000', expected_close_date: '2026-07-22' }
+const PANELS = [
+  {
+    key: 'contacts',
+    title: 'Contacts',
+    items: row => row.contacts,
+    to: contact => `/contacts/${contact.id}`,
+    renderItem: contact => contact.name,
+    emptyMessage: 'No contacts linked.',
+  },
+]
+
+const ROW = { contacts: [{ id: 'c1', name: 'Helen Ashcombe' }], title: 'Ashcombe Wealth', value: '1850000', expected_close_date: '2026-07-22' }
 
 const renderShell = (extra = {}) => render(
   <MemoryRouter>
@@ -100,8 +111,20 @@ describe('DetailShell', () => {
     expect(screen.getByRole('button', { name: 'Show all fields' })).toHaveAttribute('aria-pressed', 'false')
   })
 
-  it('renders extra content passed as children', () => {
-    renderShell({ children: <div data-testid="extra">Contacts card</div> })
-    expect(screen.getByTestId('extra')).toBeInTheDocument()
+  it('renders a related panel that has records', () => {
+    renderShell({ panels: PANELS })
+    expect(screen.getByRole('link', { name: /Helen Ashcombe/ })).toBeInTheDocument()
+  })
+
+  it('withholds a related panel with no records, and the rail with it', () => {
+    renderShell({ panels: PANELS, row: { ...ROW, contacts: [] } })
+    expect(screen.queryByRole('complementary', { name: 'Related records' })).not.toBeInTheDocument()
+  })
+
+  it('reveals an empty related panel through the same toggle as empty fields', async () => {
+    renderShell({ panels: PANELS, row: { ...ROW, contacts: [] } })
+    await userEvent.click(screen.getByRole('button', { name: 'Show all fields' }))
+    expect(screen.getByRole('complementary', { name: 'Related records' })).toBeInTheDocument()
+    expect(screen.getByText('No contacts linked.')).toBeInTheDocument()
   })
 })

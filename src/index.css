@@ -23,6 +23,13 @@
   --shadow-md:   0 4px 16px -4px rgba(15, 29, 59, .12), 0 1px 3px rgba(15, 29, 59, .06);
   --shadow-rail: 8px 0 12px -10px rgba(15, 29, 59, .30);
   --radius-lg:   10px;
+
+  /* Detail-view spacing scale. Distance encodes relatedness: fields inside a
+     group sit closest, groups are further apart, sections furthest. Nothing on
+     a detail page should space itself outside this scale. */
+  --gap-field:   14px;
+  --gap-group:   22px;
+  --gap-section: 24px;
   --radius-sm:   7px;
 
   --font-ui:   'Manrope', ui-sans-serif, system-ui, sans-serif;

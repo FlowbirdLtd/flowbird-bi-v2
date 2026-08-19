@@ -2,15 +2,22 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHeader from '../PageHeader'
 import DetailSection from './DetailSection'
+import RelatedRail from './RelatedRail'
+import { visiblePanels } from './visibility'
 import { readShowEmpty, writeShowEmpty } from './emptyStorage'
 
 /**
- * Card layout shared by every object-view page — the detail-page counterpart
- * to TableShell. Owns nothing entity-specific: a page supplies `sections`
- * (the field-config groups from its `features/<domain>/detailFields.jsx`)
- * and the fetched `row`.
+ * Card layout shared by every object-view page — the detail-page counterpart to
+ * TableShell. Owns nothing entity-specific: a page supplies `sections` (the
+ * field-config groups from its `features/<domain>/detailFields.jsx`), optional
+ * `panels` (its associations) and the fetched `row`.
+ *
+ * One toggle governs everything withheld on the page: empty fields, sections
+ * that are entirely empty, and associations with no records.
  */
-export default function DetailShell({ title, subtitle, breadcrumb, sections, row, backLink, children }) {
+export default function DetailShell({
+  title, subtitle, breadcrumb, sections, panels = [], row, backLink,
+}) {
   const [showEmpty, setShowEmpty] = useState(() => readShowEmpty())
 
   function toggleShowEmpty() {
@@ -20,6 +27,8 @@ export default function DetailShell({ title, subtitle, breadcrumb, sections, row
       return next
     })
   }
+
+  const hasRail = visiblePanels(panels, row, showEmpty).length > 0
 
   return (
     <div style={{ padding: 24 }}>
@@ -53,25 +62,21 @@ export default function DetailShell({ title, subtitle, breadcrumb, sections, row
 
       <div
         style={{
-          background: 'var(--surface)', border: '1px solid var(--line)',
-          borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-md)', overflow: 'hidden',
+          display: 'grid', alignItems: 'start', gap: 'var(--gap-section)',
+          gridTemplateColumns: hasRail ? 'minmax(0, 1fr) 300px' : 'minmax(0, 1fr)',
         }}
       >
-        {sections.map(section => (
-          <DetailSection
-            key={section.title}
-            title={section.title}
-            fields={section.fields}
-            row={row}
-            showEmpty={showEmpty}
-          />
-        ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-section)', minWidth: 0 }}>
+          {sections.map(section => (
+            <DetailSection key={section.title} section={section} row={row} showEmpty={showEmpty} />
+          ))}
+        </div>
+
+        <RelatedRail panels={panels} row={row} showEmpty={showEmpty} />
       </div>
 
-      {children}
-
       {backLink && (
-        <div style={{ marginTop: 24 }}>
+        <div style={{ marginTop: 'var(--gap-section)' }}>
           <Link to={backLink.to} style={{ color: 'var(--accent)', fontSize: 13 }}>
             &larr; {backLink.label}
           </Link>

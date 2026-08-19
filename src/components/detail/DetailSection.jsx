@@ -1,49 +1,52 @@
-import { getValue, isEmpty } from '@/components/table/format'
-import Field from './Field'
+import FieldGroup from './FieldGroup'
+import { visibleGroups, hiddenCount } from './visibility'
 
 /**
- * One card section: an uppercase micro-label bar (mirrors DataTable's
- * `headerStyle`) over a responsive field grid. Renders nothing when every
- * field is empty and the "show all" toggle is off — the section header,
- * grid and all, so no dangling empty card appears on a sparsely-filled row.
+ * One section, rendered as its own card so the gap between sections is real
+ * space rather than a divider line. Renders nothing when every field is empty
+ * and the "show all" toggle is off, so a sparse record shows no hollow cards.
  */
-export default function DetailSection({ title, fields, row, showEmpty }) {
-  const emptyFlags = fields.map(field => isEmpty(getValue(row, field.key), field.type))
-  const hiddenCount = emptyFlags.filter(Boolean).length
+export default function DetailSection({ section, row, showEmpty }) {
+  const groups = visibleGroups(section, row, showEmpty)
 
-  if (!showEmpty && hiddenCount === fields.length) return null
+  if (groups.length === 0) return null
 
-  const visibleFields = showEmpty ? fields : fields.filter((_, i) => !emptyFlags[i])
+  const hidden = hiddenCount(section, row)
 
   return (
-    <div>
+    <section
+      style={{
+        background: 'var(--surface)', border: '1px solid var(--line)',
+        borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)', overflow: 'hidden',
+      }}
+    >
       <div
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-          background: 'var(--surface-alt)', borderBottom: '1px solid var(--line-strong)',
-          padding: '9px 14px',
+          background: 'var(--surface-alt)', borderBottom: '1px solid var(--line)',
+          padding: '9px 16px',
         }}
       >
-        <span
+        <h2
           style={{
             fontFamily: 'var(--font-data)', fontSize: 10.5, fontWeight: 600,
             letterSpacing: '.085em', textTransform: 'uppercase', color: 'var(--ink-faint)',
           }}
         >
-          {title}
-        </span>
-        {!showEmpty && hiddenCount > 0 && (
+          {section.title}
+        </h2>
+        {!showEmpty && hidden > 0 && (
           <span style={{ fontFamily: 'var(--font-data)', fontSize: 10.5, color: 'var(--ink-faint)' }}>
-            {hiddenCount} empty
+            {hidden} empty
           </span>
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
-        {visibleFields.map(field => (
-          <Field key={field.key} field={field} row={row} />
+      <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 'var(--gap-group)' }}>
+        {groups.map((entry, i) => (
+          <FieldGroup key={entry.group.label || i} group={entry.group} fields={entry.fields} row={row} />
         ))}
       </div>
-    </div>
+    </section>
   )
 }
