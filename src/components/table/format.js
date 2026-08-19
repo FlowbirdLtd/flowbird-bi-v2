@@ -62,3 +62,12 @@ export function formatCell(value, type = 'text') {
 
   return String(value)
 }
+
+/**
+ * True when a value has nothing worth showing, using the same rule as the
+ * table: whatever `formatCell` refuses to render is empty. Keeping one rule
+ * means "£0 is not priced yet" holds in a detail field as well as a cell.
+ */
+export function isEmpty(value, type = 'text') {
+  return formatCell(value, type) === null
+}

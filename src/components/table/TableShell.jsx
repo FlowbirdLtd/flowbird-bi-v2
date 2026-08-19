@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import ExportModal from '../ExportModal'
+import PageHeader from '../PageHeader'
 import StatStrip from './StatStrip'
 import TableToolbar from './TableToolbar'
 import Pagination from './Pagination'
@@ -32,16 +33,7 @@ export default function TableShell({
         />
       )}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: 16, marginBottom: 20 }}>
-        <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-.022em', color: 'var(--text)' }}>
-            {title}
-          </h1>
-          {subtitle && <div style={{ color: 'var(--ink-soft)', fontSize: 13, marginTop: 2 }}>{subtitle}</div>}
-        </div>
-        <div style={{ flex: '1 1 auto' }} />
-        {headerAction}
-      </div>
+      <PageHeader title={title} subtitle={subtitle} action={headerAction} />
 
       <StatStrip stats={stats} />
 
