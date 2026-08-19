@@ -25,7 +25,11 @@ export default function FieldGroup({ group, row, fields }) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          // auto-FILL, not auto-fit: auto-fit collapses the unused tracks, so a
+          // 3-field group would stretch to a different column width than a
+          // 4-field group above it and the two would not line up. Keeping the
+          // empty tracks means every group in a section shares one column grid.
+          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
           columnGap: 24,
           rowGap: 'var(--gap-field)',
         }}

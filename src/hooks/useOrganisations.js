@@ -26,7 +26,8 @@ export function useOrganisation(id) {
         .from('organisations')
         .select(`
           *,
-          contacts(*)
+          contacts(*),
+          deals(id, title, stage, value, archive_time)
         `)
         .eq('id', id)
         .single()

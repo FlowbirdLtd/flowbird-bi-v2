@@ -18,5 +18,9 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/tests/setup.js',
     passWithNoTests: true,
+    // Agent worktrees live under .claude/worktrees/ and carry their own full
+    // copy of src/ and src/tests/. Without this they get collected alongside
+    // the real suite and report another branch's results as if they were ours.
+    exclude: ['node_modules/**', 'dist/**', '.claude/**'],
   },
 })
