@@ -1,14 +1,30 @@
+import { Link } from 'react-router-dom'
+
+function BackIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <line x1="19" y1="12" x2="5" y2="12" />
+      <polyline points="12 19 5 12 12 5" />
+    </svg>
+  )
+}
+
 /**
  * The title block every page opens with. Owns nothing entity-specific — list,
  * board and detail views all render through this so their headers stay
- * identical. `breadcrumb` sits above the title; `action` is right-aligned.
+ * identical. `back` renders as a chip in the nav row above the title;
+ * `action` is right-aligned against the title.
  */
-export default function PageHeader({ title, subtitle, breadcrumb, action }) {
+export default function PageHeader({ title, subtitle, back, action }) {
   return (
     <div style={{ marginBottom: 20 }}>
-      {breadcrumb && (
-        <div style={{ fontSize: 12.5, color: 'var(--ink-faint)', marginBottom: 8 }}>
-          {breadcrumb}
+      {back && (
+        <div style={{ marginBottom: 10 }}>
+          <Link to={back.to} className="back-btn">
+            <BackIcon />
+            {back.label}
+          </Link>
         </div>
       )}
 

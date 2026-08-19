@@ -60,14 +60,14 @@ export default function DealsPage() {
   if (view === 'board') {
     return (
       <div style={{ padding: 24 }}>
-        <PageHeader title="Deals" subtitle="Mirrored from Pipedrive" action={viewToggle} />
+        <PageHeader title="Deals" subtitle="Every deal in the pipeline, mirrored from Pipedrive" action={viewToggle} />
         <StatStrip stats={dealStats(boardDeals)} />
 
         {isLoading ? (
           <div style={{ padding: 40, textAlign: 'center', color: 'var(--ink-soft)' }}>Loading…</div>
         ) : isError ? (
           <div style={{
-            padding: 32, borderRadius: 6, fontSize: 13,
+            padding: 32, borderRadius: 'var(--radius-sm)', fontSize: 13,
             background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c',
           }}>
             <strong>Database error:</strong> {error.message}
@@ -92,7 +92,7 @@ export default function DealsPage() {
   return (
     <TableShell
       title="Deals"
-      subtitle="Mirrored from Pipedrive"
+      subtitle="Every deal in the pipeline, mirrored from Pipedrive"
       stats={dealStats(table.filteredRows)}
       headerAction={viewToggle}
       tabs={

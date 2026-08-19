@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import PageHeader from '../PageHeader'
 import DetailSection from './DetailSection'
 import RelatedRail from './RelatedRail'
@@ -16,7 +15,7 @@ import { readShowEmpty, writeShowEmpty } from './emptyStorage'
  * that are entirely empty, and associations with no records.
  */
 export default function DetailShell({
-  title, subtitle, breadcrumb, sections, panels = [], row, backLink,
+  title, subtitle, sections, panels = [], row, backLink, isLoading, missingLabel,
 }) {
   const [showEmpty, setShowEmpty] = useState(() => readShowEmpty())
 
@@ -28,6 +27,25 @@ export default function DetailShell({
     })
   }
 
+  // Loading and not-found are the shell's job, the same way TableShell owns
+  // its own states — and both keep the back link, so a missing record is never
+  // a dead end the user has to reach for the browser Back button to escape.
+  if (isLoading || !row) {
+    return (
+      <div style={{ padding: 24 }}>
+        <PageHeader title={isLoading ? '' : 'Not found'} back={backLink} />
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--line)',
+          borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-sm)',
+          padding: '48px 24px', textAlign: 'center',
+          fontSize: 13.5, color: 'var(--ink-soft)',
+        }}>
+          {isLoading ? 'Loading…' : `This ${missingLabel} no longer exists, or you don't have access to it.`}
+        </div>
+      </div>
+    )
+  }
+
   const hasRail = visiblePanels(panels, row, showEmpty).length > 0
 
   return (
@@ -35,14 +53,7 @@ export default function DetailShell({
       <PageHeader
         title={title}
         subtitle={subtitle}
-        breadcrumb={breadcrumb && (
-          <>
-            <Link to={breadcrumb.to} style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-              {breadcrumb.label}
-            </Link>
-            {breadcrumb.trail}
-          </>
-        )}
+        back={backLink}
         action={
           <button
             type="button"
@@ -50,7 +61,7 @@ export default function DetailShell({
             onClick={toggleShowEmpty}
             style={{
               font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              border: '1px solid transparent', borderRadius: 999, padding: '6px 13px',
+              border: '1px solid transparent', borderRadius: 'var(--radius-sm)', padding: '6px 13px',
               background: showEmpty ? 'var(--accent-wash)' : 'transparent',
               color: showEmpty ? 'var(--accent)' : 'var(--ink-soft)',
             }}
@@ -74,14 +85,6 @@ export default function DetailShell({
 
         <RelatedRail panels={panels} row={row} showEmpty={showEmpty} />
       </div>
-
-      {backLink && (
-        <div style={{ marginTop: 'var(--gap-section)' }}>
-          <Link to={backLink.to} style={{ color: 'var(--accent)', fontSize: 13 }}>
-            &larr; {backLink.label}
-          </Link>
-        </div>
-      )}
     </div>
   )
 }

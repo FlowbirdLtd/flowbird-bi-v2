@@ -14,7 +14,7 @@ const PERMISSION_TONES = { Admin: 'amber', Developer: 'blue', Staff: 'neutral' }
 const actionButton = {
   font: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer',
   border: '1px solid var(--line-strong)', background: 'var(--surface)',
-  color: 'var(--text)', borderRadius: 6, padding: '5px 10px',
+  color: 'var(--text)', borderRadius: 'var(--radius-sm)', padding: '5px 10px',
   display: 'inline-flex', alignItems: 'center', gap: 5,
 }
 

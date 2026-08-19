@@ -17,7 +17,7 @@ export default function ViewToggle({ view, onChange }) {
             onClick={() => onChange(option.value)}
             style={{
               font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              border: '1px solid transparent', borderRadius: 999,
+              border: '1px solid transparent', borderRadius: 'var(--radius-sm)',
               padding: '6px 13px', whiteSpace: 'nowrap',
               background: selected ? 'var(--accent-wash)' : 'transparent',
               color: selected ? 'var(--accent)' : 'var(--ink-soft)',

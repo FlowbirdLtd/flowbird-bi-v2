@@ -98,7 +98,7 @@ export default function AddUserModal({ onClose }) {
           <button
             onClick={onClose}
             style={{
-              background: 'var(--line-strong)', border: 'none', borderRadius: '50%',
+              background: 'var(--line-strong)', border: 'none', borderRadius: 'var(--radius-sm)',
               width: 26, height: 26, cursor: 'pointer', color: 'var(--surface)',
               fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: 700,

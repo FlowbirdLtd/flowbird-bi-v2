@@ -4,7 +4,7 @@ export default function Chip({ label, tone = 'neutral' }) {
     <span
       style={{
         display: 'inline-flex', alignItems: 'center', gap: 6,
-        padding: '3px 9px 3px 8px', borderRadius: 999,
+        padding: '3px 9px 3px 8px', borderRadius: 'var(--radius-sm)',
         fontSize: 11.5, fontWeight: 600, whiteSpace: 'nowrap',
         background: `var(--chip-${tone}-bg)`,
         color: `var(--chip-${tone}-fg)`,

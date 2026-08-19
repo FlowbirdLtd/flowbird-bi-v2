@@ -9,7 +9,14 @@
   --accent: #0B3A86;
   --red: #C8102E;
   --border: #e5e7eb;
-  --radius: 6px;
+  /* Radius scale. This is a BI dashboard — dense tables, records, decisions —
+     so the shapes sit deliberately mid-register: soft enough not to read as
+     harsh or aliased, tight enough that nothing looks pill-shaped or floaty.
+     `sm` is controls, `lg` is containers. Nothing in the app should hardcode a
+     radius; change the register here and the whole surface moves together. */
+  --radius-sm:   4px;   /* controls: buttons, inputs, chips, tabs */
+  --radius-lg:   6px;   /* containers: cards, panels, modals, table shells */
+  --radius:      4px;   /* legacy alias for --radius-sm */
 
   /* Table system — additive. Existing tokens above keep their meanings. */
   --ground:      #F4F6FA;
@@ -22,7 +29,6 @@
   --shadow-sm:   0 1px 2px rgba(15, 29, 59, .06);
   --shadow-md:   0 4px 16px -4px rgba(15, 29, 59, .12), 0 1px 3px rgba(15, 29, 59, .06);
   --shadow-rail: 8px 0 12px -10px rgba(15, 29, 59, .30);
-  --radius-lg:   10px;
 
   /* Detail-view spacing scale. Distance encodes relatedness: fields inside a
      group sit closest, groups are further apart, sections furthest. Nothing on
@@ -30,7 +36,6 @@
   --gap-field:   14px;
   --gap-group:   22px;
   --gap-section: 24px;
-  --radius-sm:   7px;
 
   --font-ui:   'Manrope', ui-sans-serif, system-ui, sans-serif;
   --font-data: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -65,4 +70,51 @@ body {
 }
 .hide-h-scrollbar::-webkit-scrollbar {
   display: none;              /* Chrome, Edge, Safari */
+}
+
+/* App nav — hover/active affordances that inline styles can't express.
+   Colours still come from the tokens above; these rules only carry state. */
+.nav-link {
+  transition: background-color .16s ease, color .16s ease;
+}
+.nav-link:hover { background: rgba(255, 255, 255, .09); color: #fff; }
+.nav-link:hover .nav-icon { background-color: #fff; }
+
+.nav-btn { transition: background-color .16s ease, border-color .16s ease; }
+.nav-btn:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .34); }
+
+.nav-link:focus-visible,
+.nav-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .8);
+  outline-offset: 2px;
+}
+
+/* Back button on the object views — sits in the header nav row, above the
+   title. A quiet chip until hovered, so it never competes with the H1. */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  padding: 5px 12px 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -.005em;
+  text-decoration: none;
+  transition: background-color .16s ease, border-color .16s ease, color .16s ease;
+}
+.back-btn:hover {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.back-btn:hover svg { transform: translateX(-2px); }
+.back-btn svg { transition: transform .16s ease; }
+.back-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

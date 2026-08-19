@@ -43,7 +43,7 @@ export default function TableShell({
       }}>
         {notice && (
           <div style={{
-            margin: '12px 16px 0', padding: '9px 12px', borderRadius: 6, fontSize: 13,
+            margin: '12px 16px 0', padding: '9px 12px', borderRadius: 'var(--radius-sm)', fontSize: 13,
             background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c',
           }}>
             {notice}
@@ -75,7 +75,7 @@ export default function TableShell({
           <div style={{ padding: 40, textAlign: 'center', color: 'var(--ink-soft)' }}>Loading…</div>
         ) : error ? (
           <div style={{
-            padding: 32, margin: 16, borderRadius: 6, fontSize: 13,
+            padding: 32, margin: 16, borderRadius: 'var(--radius-sm)', fontSize: 13,
             background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c',
           }}>
             <strong>Database error:</strong> {error.message}

@@ -74,7 +74,7 @@ export default function ExportModal({ data, filename, onClose }) {
           <button
             onClick={onClose}
             style={{
-              background: 'var(--line)', border: 'none', borderRadius: '50%',
+              background: 'var(--line)', border: 'none', borderRadius: 'var(--radius-sm)',
               width: 28, height: 28, cursor: 'pointer',
               fontSize: 16, color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}

@@ -17,7 +17,7 @@ function ChevronRight() {
 const stepButton = disabled => ({
   font: 'inherit', cursor: disabled ? 'default' : 'pointer',
   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-  width: 28, height: 28, borderRadius: 6,
+  width: 28, height: 28, borderRadius: 'var(--radius-sm)',
   border: '1px solid var(--line-strong)', background: 'var(--surface)',
   color: 'var(--ink-soft)', opacity: disabled ? 0.4 : 1,
 })
@@ -47,7 +47,7 @@ export default function Pagination({
         onChange={e => onPerPageChange(Number(e.target.value))}
         style={{
           font: 'inherit', fontSize: 12.5, color: 'var(--text)', background: 'var(--surface)',
-          border: '1px solid var(--line-strong)', borderRadius: 6, padding: '5px 8px', cursor: 'pointer',
+          border: '1px solid var(--line-strong)', borderRadius: 'var(--radius-sm)', padding: '5px 8px', cursor: 'pointer',
         }}
       >
         {perPageOptions.map(n => <option key={n} value={n}>{n} per page</option>)}

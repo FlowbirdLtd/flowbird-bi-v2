@@ -22,7 +22,7 @@ export default function ContactsPage() {
   return (
     <TableShell
       title="Contacts"
-      subtitle="Mirrored from Pipedrive"
+      subtitle="People linked to organisations and deals"
       stats={contactStats(table.filteredRows)}
       table={table}
       columns={CONTACT_COLUMNS}

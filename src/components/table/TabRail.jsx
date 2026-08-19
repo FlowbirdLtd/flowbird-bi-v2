@@ -13,7 +13,7 @@ export default function TabRail({ tabs, active, counts = {}, onChange }) {
               onClick={() => onChange(tab)}
               style={{
                 font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                border: '1px solid transparent', borderRadius: 999,
+                border: '1px solid transparent', borderRadius: 'var(--radius-sm)',
                 padding: '6px 13px', whiteSpace: 'nowrap',
                 display: 'inline-flex', alignItems: 'center', gap: 7,
                 background: selected ? 'var(--accent-wash)' : 'transparent',

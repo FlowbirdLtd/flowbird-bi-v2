@@ -22,7 +22,7 @@ export default function OrganisationsPage() {
   return (
     <TableShell
       title="Organisations"
-      subtitle="Mirrored from Pipedrive"
+      subtitle="Companies and accounts on file"
       stats={organisationStats(table.filteredRows)}
       table={table}
       columns={ORGANISATION_COLUMNS}

@@ -77,7 +77,7 @@ export default function ColumnPicker({ columns, hidden, onToggle }) {
                 key={column.key}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 9, padding: '6px 8px',
-                  borderRadius: 6, fontSize: 13, cursor: locked ? 'default' : 'pointer',
+                  borderRadius: 'var(--radius-sm)', fontSize: 13, cursor: locked ? 'default' : 'pointer',
                   color: 'var(--text)',
                 }}
               >

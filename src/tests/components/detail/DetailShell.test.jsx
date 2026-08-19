@@ -39,7 +39,6 @@ const renderShell = (extra = {}) => render(
   <MemoryRouter>
     <DetailShell
       title="Deal Information"
-      breadcrumb={{ to: '/deals', label: 'Deals', trail: ' > View Deal Details.' }}
       sections={SECTIONS}
       row={ROW}
       backLink={{ to: '/deals', label: 'Back to Deals' }}
@@ -51,11 +50,30 @@ const renderShell = (extra = {}) => render(
 describe('DetailShell', () => {
   beforeEach(() => localStorage.clear())
 
-  it('renders the title, breadcrumb link and back link', () => {
+  it('shows a loading state that keeps the back link reachable', () => {
+    renderShell({ isLoading: true, row: undefined })
+    expect(screen.getByText('Loading…')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Back to Deals/ })).toBeInTheDocument()
+  })
+
+  it('shows a not-found state naming the entity, still with a way out', () => {
+    renderShell({ row: undefined, missingLabel: 'deal' })
+    expect(screen.getByText(/This deal no longer exists/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Back to Deals/ })).toBeInTheDocument()
+  })
+
+  it('renders the title and the back link', () => {
     renderShell()
     expect(screen.getByRole('heading', { name: 'Deal Information' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Deals' })).toHaveAttribute('href', '/deals')
     expect(screen.getByRole('link', { name: /Back to Deals/ })).toHaveAttribute('href', '/deals')
+  })
+
+  it('puts the back link above the title, not after the content', () => {
+    const { container } = renderShell()
+    const back = screen.getByRole('link', { name: /Back to Deals/ })
+    const heading = screen.getByRole('heading', { name: 'Deal Information' })
+    expect(back.compareDocumentPosition(heading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(container.querySelectorAll('.back-btn')).toHaveLength(1)
   })
 
   it('formats a date field via formatCell (en-GB)', () => {

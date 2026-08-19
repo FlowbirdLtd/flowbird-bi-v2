@@ -4,7 +4,7 @@ import { platform } from '../lib/platformClient'
 import { useAuth } from '../contexts/AuthContext'
 
 const inputStyle = {
-  border: '1px solid var(--border)', borderRadius: 4,
+  border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)',
   padding: '8px 10px', fontSize: 13, width: '100%', boxSizing: 'border-box',
 }
 const labelStyle = { fontSize: 13, fontWeight: 700, marginBottom: 6, display: 'block' }
@@ -230,7 +230,7 @@ function Feedback({ msg }) {
     <div style={{
       background: isSuccess ? '#f0fdf4' : '#fef2f2',
       border: `1px solid ${isSuccess ? '#bbf7d0' : '#fecaca'}`,
-      borderRadius: 4, padding: '8px 12px', fontSize: 13,
+      borderRadius: 'var(--radius-sm)', padding: '8px 12px', fontSize: 13,
       color: isSuccess ? '#15803d' : '#b91c1c', marginBottom: 16,
     }}>
       {msg.text}
@@ -246,7 +246,7 @@ function PrimaryBtn({ onClick, disabled, children, style = {} }) {
       disabled={disabled}
       style={{
         background: disabled ? '#6b7280' : '#111827',
-        color: '#fff', border: 'none', borderRadius: 4,
+        color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)',
         padding: '9px 20px', fontSize: 13,
         cursor: disabled ? 'default' : 'pointer', fontWeight: 600,
         ...style,
@@ -266,7 +266,7 @@ function PipedriveCardHeader({ connected }) {
       display: 'flex', alignItems: 'center', gap: 12,
     }}>
       <div style={{
-        width: 36, height: 36, borderRadius: 6,
+        width: 36, height: 36, borderRadius: 'var(--radius-sm)',
         background: '#017737',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         color: '#fff', fontSize: 15, fontWeight: 800, flexShrink: 0,
@@ -286,7 +286,7 @@ function PipedriveCardHeader({ connected }) {
         <div style={{
           marginLeft: 'auto', fontSize: 11, fontWeight: 600,
           color: '#15803d', background: '#f0fdf4',
-          border: '1px solid #bbf7d0', borderRadius: 12,
+          border: '1px solid #bbf7d0', borderRadius: 'var(--radius-lg)',
           padding: '3px 10px',
         }}>
           Connected
@@ -362,7 +362,7 @@ function SearchableSelect({ value, options, onChange, invalid }) {
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
           border: `1px solid ${invalid ? '#fca5a5' : 'var(--border)'}`,
-          borderRadius: 4, padding: '5px 8px', fontSize: 12,
+          borderRadius: 'var(--radius-sm)', padding: '5px 8px', fontSize: 12,
           background: invalid ? '#fff7f7' : '#fff', cursor: 'pointer', width: '100%',
           color: value ? 'var(--text)' : 'var(--text-muted)', textAlign: 'left',
         }}
@@ -379,7 +379,7 @@ function SearchableSelect({ value, options, onChange, invalid }) {
           style={{
             position: 'fixed', top: pos.top, left: pos.left, width: pos.width,
             zIndex: 1000, background: '#fff', border: '1px solid var(--border)',
-            borderRadius: 6, boxShadow: '0 6px 20px rgba(0,0,0,0.12)', overflow: 'hidden',
+            borderRadius: 'var(--radius-sm)', boxShadow: '0 6px 20px rgba(0,0,0,0.12)', overflow: 'hidden',
           }}
         >
           <div style={{ padding: 6, borderBottom: '1px solid var(--border)' }}>
@@ -394,7 +394,7 @@ function SearchableSelect({ value, options, onChange, invalid }) {
               placeholder="Search columns…"
               style={{
                 width: '100%', boxSizing: 'border-box', border: '1px solid var(--border)',
-                borderRadius: 4, padding: '5px 8px', fontSize: 12,
+                borderRadius: 'var(--radius-sm)', padding: '5px 8px', fontSize: 12,
               }}
             />
           </div>
@@ -781,7 +781,7 @@ export default function AccountSettingsPage() {
         <div style={{
           width: 200, flexShrink: 0,
           background: '#fff', border: '1px solid var(--border)',
-          borderRadius: 8, overflow: 'hidden',
+          borderRadius: 'var(--radius-lg)', overflow: 'hidden',
         }}>
           {navItems.map((item, i) => {
             // A parent with children is "active" when any of its children is
@@ -841,11 +841,11 @@ export default function AccountSettingsPage() {
 
           {/* ── My Profile ─────────────────────────────────────────────────── */}
           {activeTab === 'profile' && (
-            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 8 }}>
+            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
               <div style={{
                 padding: '14px 20px', background: '#f3f4f6',
                 borderBottom: '1px solid var(--border)',
-                borderRadius: '8px 8px 0 0', fontWeight: 700, fontSize: 15,
+                borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0', fontWeight: 700, fontSize: 15,
               }}>
                 My Profile
               </div>
@@ -932,17 +932,17 @@ export default function AccountSettingsPage() {
 
           {/* ── Integrations · APIs ────────────────────────────────────────── */}
           {activeTab === 'integrations-apis' && isDeveloper && (
-            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 8 }}>
+            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
               <div style={{
                 padding: '14px 20px', background: '#f3f4f6',
                 borderBottom: '1px solid var(--border)',
-                borderRadius: '8px 8px 0 0', fontWeight: 700, fontSize: 15,
+                borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0', fontWeight: 700, fontSize: 15,
               }}>
                 APIs
               </div>
               <div style={{ padding: '24px 24px 28px' }}>
 
-                <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+                <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
 
                   <PipedriveCardHeader connected={tokenSaved} />
 
@@ -965,7 +965,7 @@ export default function AccountSettingsPage() {
                           type="button"
                           onClick={() => setShowToken(s => !s)}
                           style={{
-                            border: '1px solid var(--border)', borderRadius: 4, background: '#fff',
+                            border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', background: '#fff',
                             padding: '0 12px', cursor: 'pointer', fontSize: 12, color: '#6b7280',
                             whiteSpace: 'nowrap', flexShrink: 0,
                           }}
@@ -993,7 +993,7 @@ export default function AccountSettingsPage() {
                           onClick={() => { setPipedriveMsg(null); removeTokenMutation.mutate() }}
                           disabled={removeTokenMutation.isPending}
                           style={{
-                            background: '#fff', border: '1px solid #fca5a5', borderRadius: 4,
+                            background: '#fff', border: '1px solid #fca5a5', borderRadius: 'var(--radius-sm)',
                             color: 'var(--red)', padding: '9px 20px', fontSize: 13, fontWeight: 600,
                             cursor: removeTokenMutation.isPending ? 'default' : 'pointer',
                             opacity: removeTokenMutation.isPending ? 0.5 : 1,
@@ -1013,17 +1013,17 @@ export default function AccountSettingsPage() {
 
           {/* ── Integrations · Sync ────────────────────────────────────────── */}
           {activeTab === 'integrations-sync' && isDeveloper && (
-            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 8 }}>
+            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
               <div style={{
                 padding: '14px 20px', background: '#f3f4f6',
                 borderBottom: '1px solid var(--border)',
-                borderRadius: '8px 8px 0 0', fontWeight: 700, fontSize: 15,
+                borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0', fontWeight: 700, fontSize: 15,
               }}>
                 Sync
               </div>
               <div style={{ padding: '24px 24px 28px' }}>
 
-                <div style={{ border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+                <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
 
                   <PipedriveCardHeader connected={tokenSaved} />
 
@@ -1034,7 +1034,7 @@ export default function AccountSettingsPage() {
                     {/* Per-object sync panel */}
                     <div style={{
                       background: '#f9fafb', border: '1px solid var(--border)',
-                      borderRadius: 6, overflow: 'hidden',
+                      borderRadius: 'var(--radius-sm)', overflow: 'hidden',
                     }}>
                       <div style={{
                         padding: '10px 16px', borderBottom: '1px solid var(--border)',
@@ -1081,7 +1081,7 @@ export default function AccountSettingsPage() {
                               disabled={syncMutation.isPending || !tokenSaved}
                               style={{
                                 background: isActive ? '#6b7280' : 'var(--nav)',
-                                color: '#fff', border: 'none', borderRadius: 4,
+                                color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)',
                                 padding: '6px 14px', fontSize: 12,
                                 cursor: (syncMutation.isPending || !tokenSaved) ? 'default' : 'pointer',
                                 fontWeight: 600, opacity: !tokenSaved ? 0.4 : 1,
@@ -1162,7 +1162,7 @@ export default function AccountSettingsPage() {
                         disabled={singleSyncMutation.isPending || !singleValue.trim() || !tokenSaved}
                         style={{
                           background: singleSyncMutation.isPending ? '#6b7280' : '#111827',
-                          color: '#fff', border: 'none', borderRadius: 4,
+                          color: '#fff', border: 'none', borderRadius: 'var(--radius-sm)',
                           padding: '8px 14px', fontSize: 12, fontWeight: 600,
                           cursor: (singleSyncMutation.isPending || !singleValue.trim() || !tokenSaved)
                             ? 'default' : 'pointer',
@@ -1178,7 +1178,7 @@ export default function AccountSettingsPage() {
                       <div style={{
                         background: singleMsg.type === 'success' ? '#f0fdf4' : '#fef2f2',
                         border: `1px solid ${singleMsg.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-                        borderRadius: 4, padding: '7px 11px', fontSize: 12,
+                        borderRadius: 'var(--radius-sm)', padding: '7px 11px', fontSize: 12,
                         color: singleMsg.type === 'success' ? '#15803d' : '#b91c1c',
                       }}>
                         {singleMsg.text}
@@ -1194,11 +1194,11 @@ export default function AccountSettingsPage() {
 
           {/* ── Import ─────────────────────────────────────────────────────── */}
           {activeTab === 'import' && canManage && (
-            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 8 }}>
+            <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
               <div style={{
                 padding: '14px 20px', background: '#f3f4f6',
                 borderBottom: '1px solid var(--border)',
-                borderRadius: '8px 8px 0 0', fontWeight: 700, fontSize: 15,
+                borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0', fontWeight: 700, fontSize: 15,
               }}>
                 Import
               </div>
@@ -1235,7 +1235,7 @@ export default function AccountSettingsPage() {
                     }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12,
-                      padding: '18px 16px', borderRadius: 8,
+                      padding: '18px 16px', borderRadius: 'var(--radius-lg)',
                       border: `2px dashed ${importDragOver ? 'var(--accent)' : 'var(--border)'}`,
                       background: importDragOver ? '#eff4ff' : '#fafafa',
                       transition: 'border-color 0.15s, background 0.15s',
@@ -1243,7 +1243,7 @@ export default function AccountSettingsPage() {
                   >
                     <label style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
-                      background: '#111827', color: '#fff', borderRadius: 4,
+                      background: '#111827', color: '#fff', borderRadius: 'var(--radius-sm)',
                       padding: '9px 18px', fontSize: 13, fontWeight: 600,
                       cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
                     }}>
@@ -1270,7 +1270,7 @@ export default function AccountSettingsPage() {
                         title="Remove file"
                         style={{
                           display: 'inline-flex', alignItems: 'center', gap: 5,
-                          background: '#fff', border: '1px solid #fca5a5', borderRadius: 4,
+                          background: '#fff', border: '1px solid #fca5a5', borderRadius: 'var(--radius-sm)',
                           color: 'var(--red)', padding: '4px 10px', fontSize: 12, fontWeight: 600,
                           cursor: importing ? 'default' : 'pointer', opacity: importing ? 0.5 : 1,
                           flexShrink: 0,
@@ -1293,7 +1293,7 @@ export default function AccountSettingsPage() {
                         </strong> of {importParsed.headers.length} columns mapped
                       </span>
                     </div>
-                    <div style={{ border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden' }}>
+                    <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
                       {/* Table header */}
                       <div style={{
                         display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
@@ -1349,11 +1349,12 @@ export default function AccountSettingsPage() {
                     <div style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 6 }}>
                       Importing… {importProgress.done} / {importProgress.total}
                     </div>
-                    <div style={{ height: 6, background: 'var(--border)', borderRadius: 3, overflow: 'hidden' }}>
+                    <div style={{ height: 6, background: 'var(--border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
                       <div style={{
-                        height: '100%', borderRadius: 3, background: 'var(--accent)',
-                        width: `${Math.round((importProgress.done / importProgress.total) * 100)}%`,
-                        transition: 'width 0.2s',
+                        height: '100%', borderRadius: 'var(--radius-sm)', background: 'var(--accent)',
+                        width: '100%', transformOrigin: 'left',
+                        transform: `scaleX(${importProgress.done / importProgress.total})`,
+                        transition: 'transform 0.2s',
                       }} />
                     </div>
                   </div>
@@ -1372,7 +1373,7 @@ export default function AccountSettingsPage() {
                 {importHistory.length > 0 && (
                   <div style={{ marginTop: 32 }}>
                     <label style={labelStyle}>Import History</label>
-                    <div style={{ border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden' }}>
+                    <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
                       <div style={{
                         display: 'grid', gridTemplateColumns: '2fr 1fr 0.6fr 1.2fr 1.2fr',
                         background: '#f3f4f6', borderBottom: '1px solid var(--border)',
